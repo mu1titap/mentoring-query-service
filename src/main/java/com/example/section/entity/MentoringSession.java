@@ -17,16 +17,15 @@ import java.time.LocalTime;
 @Builder
 @Document(collection = "mentoring_session")
 @ToString
-//@JsonIgnoreProperties(ignoreUnknown = true)
 public class MentoringSession {
     @Id
     private String id;
+    private String sessionUuid;
 
     private String sessionId;
 
-    private String sessionUuid;
-
     private String mentoringId;
+    private String mentoringUuid;
 
     private LocalDate startDate;
 
@@ -45,9 +44,8 @@ public class MentoringSession {
     private Integer price;
 
     private Boolean isClosed;
+    private Boolean isDeleted;
 
-    @CreatedDate
     private LocalDateTime createdAt;
-    @LastModifiedDate
     private LocalDateTime updatedAt;
 }

@@ -1,5 +1,6 @@
 package com.example.section.entity;
 
+import com.example.section.dto.in.MentoringCategoryAfterOutDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -8,6 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -15,7 +17,6 @@ import java.time.LocalDateTime;
 @Builder
 @Document(collection = "mentoring")
 @ToString
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Mentoring {
     @Id
     private String id;
@@ -36,8 +37,9 @@ public class Mentoring {
 
     private Boolean isDeleted;
 
-    @CreatedDate
     private LocalDateTime createdAt;
-    @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    private List<MentoringCategoryAfterOutDto> mentoringCategoryList;
+
 }
