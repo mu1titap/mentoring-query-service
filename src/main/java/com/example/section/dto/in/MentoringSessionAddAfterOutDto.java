@@ -1,8 +1,7 @@
-package com.example.section.dto;
+package com.example.section.dto.in;
 
 import lombok.*;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -12,12 +11,13 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @Builder
 @ToString
-public class MentoringSessionAddAfterDto implements Serializable {
+public class MentoringSessionAddAfterOutDto {
     private String sessionId;
 
     private String sessionUuid;
 
     private String mentoringId;
+    private String mentoringUuid;
 
     private LocalDate startDate;
 
@@ -36,5 +36,11 @@ public class MentoringSessionAddAfterDto implements Serializable {
     private Integer price;
 
     private Boolean isClosed;
+
+    private Boolean isDeleted;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
 
 }

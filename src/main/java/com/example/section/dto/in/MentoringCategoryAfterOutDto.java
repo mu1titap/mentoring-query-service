@@ -1,0 +1,21 @@
+package com.example.section.dto.in;
+
+import lombok.*;
+
+import java.time.LocalDateTime;
+
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@ToString
+public class MentoringCategoryAfterOutDto {
+    private String id;
+    private String topCategoryCode;
+    private String middleCategoryCode;
+    private String bottomCategoryCode;
+    // 카테고리명
+    private String categoryName;
+
+
+}
