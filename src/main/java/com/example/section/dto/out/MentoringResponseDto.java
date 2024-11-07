@@ -60,7 +60,9 @@ public class MentoringResponseDto {
                         .topCategoryCode(categoryResponse.getTopCategoryCode())
                         .middleCategoryCode(categoryResponse.getMiddleCategoryCode())
                         .bottomCategoryCode(categoryResponse.getBottomCategoryCode())
-                        .categoryName(categoryResponse.getCategoryName())
+                        .topCategoryName(categoryResponse.getTopCategoryName())
+                        .middleCategoryName(categoryResponse.getMiddleCategoryName())
+                        .bottomCategoryName(categoryResponse.getBottomCategoryName())
                         .build())
                 .toList();
     }

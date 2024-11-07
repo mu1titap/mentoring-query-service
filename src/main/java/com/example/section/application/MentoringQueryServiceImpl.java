@@ -58,11 +58,11 @@ public class MentoringQueryServiceImpl implements  MentoringQueryService {
 
     @Override
     public void createMentoringWithSession(MentoringAddAfterOutDto dto) {
-        log.info("멘토링 카테고리 : "+dto.getMentoringCategoryAfterOutDtoList());
         // 멘토링+카테고리 저장
-        mentoringMongoRepository.save(MentoringAddAfterOutDto.toMongoMentoringEntity(dto));
+        mentoringMongoRepository.save(dto.toMongoMentoringEntity());
         // 멘토링 세션 저장
-        mentoringSessionMongoRepository.saveAll(MentoringAddAfterOutDto.toMongoSessionEntities(dto));
+        log.info("멘토링 세션 저장 : "+dto.getMentoringSessionAddAfterOutDtoList());
+        mentoringSessionMongoRepository.saveAll(dto.toMongoSessionEntities());
     }
     @Override
     public void updateMentoring(MentoringEditRequestOutDto mentoringEditRequestOutDto) {

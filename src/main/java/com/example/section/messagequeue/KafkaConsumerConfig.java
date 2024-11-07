@@ -25,7 +25,7 @@ public class KafkaConsumerConfig {
     public ConsumerFactory<String, MentoringAddAfterOutDto> mentoringConsumerFactory(){
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:29092, localhost:39092, localhost:49092");
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "kafka-mentoring-service");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "kafka-mentoring-query-service");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
@@ -44,7 +44,7 @@ public class KafkaConsumerConfig {
     public ConsumerFactory<String, MentoringEditRequestOutDto> mentoringEditConsumerFactory(){
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:29092, localhost:39092, localhost:49092");
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "kafka-mentoring-service");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "kafka-mentoring-query-service");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");

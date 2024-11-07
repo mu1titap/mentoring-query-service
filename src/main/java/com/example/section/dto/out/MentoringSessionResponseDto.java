@@ -27,7 +27,7 @@ public class MentoringSessionResponseDto {
 
     private LocalTime endTime;
 
-    private LocalDateTime deadlineDatetime;
+    private LocalDate deadlineDate;
 
     private Integer minHeadCount;
 
@@ -48,7 +48,7 @@ public class MentoringSessionResponseDto {
                 .endDate(mentoringSession.getEndDate())
                 .startTime(mentoringSession.getStartTime())
                 .endTime(mentoringSession.getEndTime())
-                .deadlineDatetime(mentoringSession.getDeadlineDatetime())
+                .deadlineDate(mentoringSession.getDeadlineDate())
                 .minHeadCount(mentoringSession.getMinHeadCount())
                 .maxHeadCount(mentoringSession.getMaxHeadCount())
                 .price(mentoringSession.getPrice())
@@ -68,7 +68,7 @@ public class MentoringSessionResponseDto {
                                                 .endDate(mentoringSession.getEndDate())
                                                 .startTime(mentoringSession.getStartTime())
                                                 .endTime(mentoringSession.getEndTime())
-                                                .deadlineDatetime(mentoringSession.getDeadlineDatetime())
+                                                .deadlineDate(mentoringSession.getDeadlineDate())
                                                 .minHeadCount(mentoringSession.getMinHeadCount())
                                                 .maxHeadCount(mentoringSession.getMaxHeadCount())
                                                 .price(mentoringSession.getPrice())

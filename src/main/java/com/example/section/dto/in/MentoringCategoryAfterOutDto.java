@@ -10,12 +10,13 @@ import java.time.LocalDateTime;
 @Builder
 @ToString
 public class MentoringCategoryAfterOutDto {
-    private String id;
     private String topCategoryCode;
     private String middleCategoryCode;
     private String bottomCategoryCode;
     // 카테고리명
-    private String categoryName;
+    private String topCategoryName;
+    private String middleCategoryName;
+    private String bottomCategoryName;
 
 
 }

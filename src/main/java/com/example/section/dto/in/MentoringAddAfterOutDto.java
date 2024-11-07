@@ -37,34 +37,34 @@ public class MentoringAddAfterOutDto {
 
     private List<MentoringCategoryAfterOutDto> mentoringCategoryAfterOutDtoList;
 
-    public static Mentoring toMongoMentoringEntity(MentoringAddAfterOutDto dto) {
+    public Mentoring toMongoMentoringEntity() {
         return Mentoring.builder()
-                .mentoringId(dto.getMentoringId())
-                .mentoringUuid(dto.getMentoringUuid())
-                .name(dto.getName())
-                .detail(dto.getDetail())
-                .mentorUuid(dto.getMentorUuid())
-                .thumbnailUrl(dto.getThumbnailUrl())
-                .isReusable(dto.getIsReusable())
-                .isDeleted(dto.getIsDeleted())
-                .createdAt(dto.getCreatedAt())
-                .updatedAt(dto.getUpdatedAt())
-                .mentoringCategoryList(dto.getMentoringCategoryAfterOutDtoList())
+                .mentoringId(this.getMentoringId())
+                .mentoringUuid(this.getMentoringUuid())
+                .name(this.getName())
+                .detail(this.getDetail())
+                .mentorUuid(this.getMentorUuid())
+                .thumbnailUrl(this.getThumbnailUrl())
+                .isReusable(this.getIsReusable())
+                .isDeleted(this.getIsDeleted())
+                .createdAt(this.getCreatedAt())
+                .updatedAt(this.getUpdatedAt())
+                .mentoringCategoryList(this.getMentoringCategoryAfterOutDtoList())
                 .build();
     }
-    public static List<MentoringSession> toMongoSessionEntities(MentoringAddAfterOutDto dto) {
-        return dto.getMentoringSessionAddAfterOutDtoList()
+    public List<MentoringSession> toMongoSessionEntities() {
+        return this.getMentoringSessionAddAfterOutDtoList()
                 .stream()
                 .map(session -> MentoringSession.builder()
                         .sessionUuid(session.getSessionUuid())
                         .sessionId(session.getSessionId())
-                        .mentoringId(dto.getMentoringId())
-                        .mentoringUuid(dto.getMentoringUuid())
+                        .mentoringId(this.getMentoringId())
+                        .mentoringUuid(this.getMentoringUuid())
                         .startDate(session.getStartDate())
                         .endDate(session.getEndDate())
                         .startTime(session.getStartTime())
                         .endTime(session.getEndTime())
-                        .deadlineDatetime(session.getDeadlineDatetime())
+                        .deadlineDate(session.getDeadlineDate())
                         .minHeadCount(session.getMinHeadCount())
                         .maxHeadCount(session.getMaxHeadCount())
                         .price(session.getPrice())

@@ -27,7 +27,7 @@ public class MentoringSessionAddAfterOutDto {
 
     private LocalTime endTime;
 
-    private LocalDateTime deadlineDatetime;
+    private LocalDate deadlineDate;
 
     private Integer minHeadCount;
 
