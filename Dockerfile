@@ -3,7 +3,7 @@ FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
-COPY build/libs/gateway-0.0.1-SNAPSHOT.jar gateway-service.jar
+COPY build/libs/mentoring-query-0.0.1-SNAPSHOT.jar mentoring-query-service.jar
 
 EXPOSE 9300
 
