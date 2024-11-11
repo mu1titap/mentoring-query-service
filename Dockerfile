@@ -3,7 +3,7 @@ FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
-COPY build/libs/mentoring-query-0.0.1-SNAPSHOT.jar mentoring-query-service.jar
+COPY build/libs/section-0.0.1-SNAPSHOT.jar mentoring-query-service.jar
 
 EXPOSE 9300
 
