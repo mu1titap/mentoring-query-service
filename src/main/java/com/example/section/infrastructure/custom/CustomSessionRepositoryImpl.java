@@ -29,6 +29,7 @@ public class CustomSessionRepositoryImpl implements CustomSessionRepository {
         Update update = new Update();
         update.inc("nowHeadCount",1);
         update.push("sessionUsers", dto.toSessionUserValueObject());
+        update.set("updatedAt", LocalDate.now());
         if (dto.getIsClosed()) {
             update.set("isClosed",true);
         }
