@@ -1,6 +1,6 @@
 package com.example.section.infrastructure.custom;
 
-import com.example.section.dto.in.MentoringEditRequestOutDto;
+import com.example.section.dto.messageIn.MentoringEditRequestOutDto;
 import com.example.section.entity.Mentoring;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -28,6 +28,7 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
 
         Update update = new Update();
         update.set("name", dto.getName());
+        update.set("description", dto.getDescription());
         update.set("detail", dto.getDetail());
         update.set("isReusable", dto.getIsReusable());
         update.set("thumbnailUrl", dto.getThumbnailUrl());

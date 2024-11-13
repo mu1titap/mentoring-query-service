@@ -1,4 +1,4 @@
-package com.example.section.dto.in;
+package com.example.section.dto.messageIn;
 
 import com.example.section.entity.Mentoring;
 import com.example.section.entity.MentoringSession;
@@ -19,7 +19,7 @@ public class MentoringAddAfterOutDto {
     private String mentoringUuid;
 
     private String name;
-
+    private String description;
     private String detail;
 
     private String mentorUuid;
@@ -42,6 +42,7 @@ public class MentoringAddAfterOutDto {
                 .mentoringId(this.getMentoringId())
                 .mentoringUuid(this.getMentoringUuid())
                 .name(this.getName())
+                .description(this.getDescription())
                 .detail(this.getDetail())
                 .mentorUuid(this.getMentorUuid())
                 .thumbnailUrl(this.getThumbnailUrl())

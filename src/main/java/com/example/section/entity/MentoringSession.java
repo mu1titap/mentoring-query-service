@@ -1,6 +1,6 @@
 package com.example.section.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.example.section.entity.vo.SessionUser;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -34,14 +35,17 @@ public class MentoringSession {
     private LocalDate deadlineDate;
 
     private Integer minHeadCount;
-
     private Integer maxHeadCount;
+    private Integer nowHeadCount;
 
     private Integer price;
 
     private Boolean isClosed;
     private Boolean isDeleted;
+    private Boolean isConfirmed; // 확정 여부
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    private List<SessionUser> sessionUsers; // 세션 유저 리스트
 }

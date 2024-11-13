@@ -1,6 +1,6 @@
 package com.example.section.infrastructure.custom;
 
-import com.example.section.dto.in.MentoringEditRequestOutDto;
+import com.example.section.dto.messageIn.MentoringEditRequestOutDto;
 import com.example.section.entity.Mentoring;
 
 import java.util.List;

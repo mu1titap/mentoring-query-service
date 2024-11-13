@@ -1,7 +1,7 @@
 package com.example.section.application;
 
-import com.example.section.dto.in.MentoringAddAfterOutDto;
-import com.example.section.dto.in.MentoringEditRequestOutDto;
+import com.example.section.dto.messageIn.MentoringAddAfterOutDto;
+import com.example.section.dto.messageIn.MentoringEditRequestOutDto;
 import com.example.section.dto.out.MentoringResponseDto;
 import com.example.section.dto.out.MentoringReusableResponseDto;
 import com.example.section.dto.out.MentoringSessionResponseDto;
@@ -10,7 +10,6 @@ import com.example.section.infrastructure.MentoringMongoRepository;
 import com.example.section.infrastructure.MentoringSessionMongoRepository;
 import com.example.section.infrastructure.custom.CustomMentoringRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 

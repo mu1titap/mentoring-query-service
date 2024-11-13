@@ -1,6 +1,6 @@
 package com.example.section.messagequeue;
-import com.example.section.dto.in.MentoringAddAfterOutDto;
-import com.example.section.dto.in.MentoringEditRequestOutDto;
+import com.example.section.dto.messageIn.MentoringAddAfterOutDto;
+import com.example.section.dto.messageIn.MentoringEditRequestOutDto;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;

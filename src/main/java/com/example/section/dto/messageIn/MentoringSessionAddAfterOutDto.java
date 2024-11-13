@@ -1,4 +1,4 @@
-package com.example.section.dto.in;
+package com.example.section.dto.messageIn;
 
 import lombok.*;
 

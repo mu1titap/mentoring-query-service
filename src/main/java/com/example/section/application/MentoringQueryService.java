@@ -1,7 +1,7 @@
 package com.example.section.application;
 
-import com.example.section.dto.in.MentoringAddAfterOutDto;
-import com.example.section.dto.in.MentoringEditRequestOutDto;
+import com.example.section.dto.messageIn.MentoringAddAfterOutDto;
+import com.example.section.dto.messageIn.MentoringEditRequestOutDto;
 import com.example.section.dto.out.MentoringResponseDto;
 import com.example.section.dto.out.MentoringReusableResponseDto;
 import com.example.section.dto.out.MentoringSessionResponseDto;

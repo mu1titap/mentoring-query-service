@@ -1,8 +1,8 @@
 package com.example.section.messagequeue;
 
 import com.example.section.application.MentoringQueryService;
-import com.example.section.dto.in.MentoringAddAfterOutDto;
-import com.example.section.dto.in.MentoringEditRequestOutDto;
+import com.example.section.dto.messageIn.MentoringAddAfterOutDto;
+import com.example.section.dto.messageIn.MentoringEditRequestOutDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.kafka.annotation.KafkaListener;
