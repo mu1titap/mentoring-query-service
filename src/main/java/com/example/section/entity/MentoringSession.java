@@ -48,4 +48,9 @@ public class MentoringSession {
     private LocalDateTime updatedAt;
 
     private List<SessionUser> sessionUsers; // 세션 유저 리스트
+
+    public void initNowHeadCountAndIsConfirmed() {
+        this.nowHeadCount = 0;
+        this.isConfirmed = false;
+    }
 }

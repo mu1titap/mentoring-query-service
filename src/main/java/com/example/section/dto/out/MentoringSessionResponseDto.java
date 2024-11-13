@@ -30,17 +30,18 @@ public class MentoringSessionResponseDto {
     private LocalDate deadlineDate;
 
     private Integer minHeadCount;
-
     private Integer maxHeadCount;
-
+    private Integer nowHeadCount;
+    private Boolean isParticipating; // 유저의 참가여부
     private Integer price;
+
 
     private Boolean isClosed;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public static MentoringSessionResponseDto fromEntity(MentoringSession mentoringSession){
+    public static MentoringSessionResponseDto from(MentoringSession mentoringSession){
         return MentoringSessionResponseDto.builder()
                 .sessionUuid(mentoringSession.getSessionUuid())
                 .mentoringUuid(mentoringSession.getMentoringUuid())
@@ -51,13 +52,14 @@ public class MentoringSessionResponseDto {
                 .deadlineDate(mentoringSession.getDeadlineDate())
                 .minHeadCount(mentoringSession.getMinHeadCount())
                 .maxHeadCount(mentoringSession.getMaxHeadCount())
+                .nowHeadCount(mentoringSession.getNowHeadCount())
                 .price(mentoringSession.getPrice())
                 .isClosed(mentoringSession.getIsClosed())
                 .createdAt(mentoringSession.getCreatedAt())
                 .updatedAt(mentoringSession.getUpdatedAt())
                 .build();
     }
-    public static List<MentoringSessionResponseDto> fromEntities(List<MentoringSession> mentoringSessions){
+    public static List<MentoringSessionResponseDto> from(List<MentoringSession> mentoringSessions){
         return mentoringSessions.stream()
                 .map(
                         mentoringSession -> MentoringSessionResponseDto
@@ -71,6 +73,7 @@ public class MentoringSessionResponseDto {
                                                 .deadlineDate(mentoringSession.getDeadlineDate())
                                                 .minHeadCount(mentoringSession.getMinHeadCount())
                                                 .maxHeadCount(mentoringSession.getMaxHeadCount())
+                                                .nowHeadCount(mentoringSession.getNowHeadCount())
                                                 .price(mentoringSession.getPrice())
                                                 .isClosed(mentoringSession.getIsClosed())
                                                 .createdAt(mentoringSession.getCreatedAt())
