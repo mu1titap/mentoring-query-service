@@ -1,8 +1,7 @@
-package com.example.section.dto.in;
+package com.example.section.dto.messageIn;
 
 import lombok.*;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Getter
@@ -15,6 +14,7 @@ public class MentoringEditRequestOutDto{
     private String id;
     private String uuid;
     private String name;
+    private String description;
     private String detail;
     private String mentorUuid;
     private Boolean isReusable;

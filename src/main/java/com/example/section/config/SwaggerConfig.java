@@ -8,7 +8,6 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 @Configuration
 public class SwaggerConfig {
 
@@ -16,26 +15,27 @@ public class SwaggerConfig {
 
     @Bean
     public OpenAPI openAPI() {
+
         String securityJwtName = "JWT";
-        SecurityRequirement securityRequirement = new SecurityRequirement().addList(
-                securityJwtName);
+        SecurityRequirement securityRequirement = new SecurityRequirement().addList(securityJwtName);
         Components components = new Components()
                 .addSecuritySchemes(securityJwtName, new SecurityScheme()
                         .name(securityJwtName)
                         .type(SecurityScheme.Type.HTTP)
                         .scheme(BEARER_TOKEN_PREFIX)
                         .bearerFormat(securityJwtName));
+
         return new OpenAPI()
                 .addSecurityItem(securityRequirement)
                 .components(components)
-                .addServersItem(new Server().url("/mentoring-query-service"))
+                //.addServersItem(new Server().url("/mentoring-section-service"))
                 .info(apiInfo());
     }
 
     private Info apiInfo() {
         return new Info()
-                .title("MENTORING QUERY SERVICE")
-                .description("MENTORING QUERY SERVICE Swagger UI")
+                .title("MSA - MENTORING QUERY SERVICE 문서")
+                .description("00 API 테스트를 위한 Swagger UI")
                 .version("1.0.0");
     }
 

@@ -1,11 +1,8 @@
 package com.example.section.entity;
 
-import com.example.section.dto.in.MentoringCategoryAfterOutDto;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.example.section.dto.messageIn.MentoringCategoryAfterOutDto;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -26,7 +23,7 @@ public class Mentoring {
     private String mentoringUuid;
 
     private String name;
-
+    private String description;
     private String detail;
 
     private String mentorUuid;

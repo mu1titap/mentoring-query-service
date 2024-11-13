@@ -27,20 +27,21 @@ public class MentoringSessionResponseDto {
 
     private LocalTime endTime;
 
-    private LocalDateTime deadlineDatetime;
+    private LocalDate deadlineDate;
 
     private Integer minHeadCount;
-
     private Integer maxHeadCount;
-
+    private Integer nowHeadCount;
+    private Boolean isParticipating; // 유저의 참가여부
     private Integer price;
+
 
     private Boolean isClosed;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public static MentoringSessionResponseDto fromEntity(MentoringSession mentoringSession){
+    public static MentoringSessionResponseDto from(MentoringSession mentoringSession){
         return MentoringSessionResponseDto.builder()
                 .sessionUuid(mentoringSession.getSessionUuid())
                 .mentoringUuid(mentoringSession.getMentoringUuid())
@@ -48,16 +49,17 @@ public class MentoringSessionResponseDto {
                 .endDate(mentoringSession.getEndDate())
                 .startTime(mentoringSession.getStartTime())
                 .endTime(mentoringSession.getEndTime())
-                .deadlineDatetime(mentoringSession.getDeadlineDatetime())
+                .deadlineDate(mentoringSession.getDeadlineDate())
                 .minHeadCount(mentoringSession.getMinHeadCount())
                 .maxHeadCount(mentoringSession.getMaxHeadCount())
+                .nowHeadCount(mentoringSession.getNowHeadCount())
                 .price(mentoringSession.getPrice())
                 .isClosed(mentoringSession.getIsClosed())
                 .createdAt(mentoringSession.getCreatedAt())
                 .updatedAt(mentoringSession.getUpdatedAt())
                 .build();
     }
-    public static List<MentoringSessionResponseDto> fromEntities(List<MentoringSession> mentoringSessions){
+    public static List<MentoringSessionResponseDto> from(List<MentoringSession> mentoringSessions){
         return mentoringSessions.stream()
                 .map(
                         mentoringSession -> MentoringSessionResponseDto
@@ -68,9 +70,10 @@ public class MentoringSessionResponseDto {
                                                 .endDate(mentoringSession.getEndDate())
                                                 .startTime(mentoringSession.getStartTime())
                                                 .endTime(mentoringSession.getEndTime())
-                                                .deadlineDatetime(mentoringSession.getDeadlineDatetime())
+                                                .deadlineDate(mentoringSession.getDeadlineDate())
                                                 .minHeadCount(mentoringSession.getMinHeadCount())
                                                 .maxHeadCount(mentoringSession.getMaxHeadCount())
+                                                .nowHeadCount(mentoringSession.getNowHeadCount())
                                                 .price(mentoringSession.getPrice())
                                                 .isClosed(mentoringSession.getIsClosed())
                                                 .createdAt(mentoringSession.getCreatedAt())

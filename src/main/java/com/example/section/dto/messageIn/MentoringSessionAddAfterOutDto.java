@@ -1,4 +1,4 @@
-package com.example.section.dto.in;
+package com.example.section.dto.messageIn;
 
 import lombok.*;
 
@@ -27,7 +27,7 @@ public class MentoringSessionAddAfterOutDto {
 
     private LocalTime endTime;
 
-    private LocalDateTime deadlineDatetime;
+    private LocalDate deadlineDate;
 
     private Integer minHeadCount;
 
