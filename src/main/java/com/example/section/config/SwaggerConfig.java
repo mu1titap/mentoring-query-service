@@ -28,7 +28,7 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .addSecurityItem(securityRequirement)
                 .components(components)
-                //.addServersItem(new Server().url("/mentoring-section-service"))
+                .addServersItem(new Server().url("/mentoring-query-service"))
                 .info(apiInfo());
     }
 
