@@ -1,13 +1,14 @@
 package com.example.section.application;
 
-import com.example.section.dto.messageIn.AfterSessionUserOutDto;
-import com.example.section.dto.messageIn.MentoringAddAfterOutDto;
 import com.example.section.dto.out.MentoringSessionResponseDto;
 import com.example.section.entity.MentoringSession;
 import com.example.section.entity.vo.SessionUser;
-import com.example.section.infrastructure.MentoringMongoRepository;
 import com.example.section.infrastructure.MentoringSessionMongoRepository;
 import com.example.section.infrastructure.custom.CustomSessionRepository;
+import com.example.section.messagequeue.messageIn.AfterSessionUserOutDto;
+import com.example.section.messagequeue.messageIn.CancelSessionUserMessage;
+import com.example.section.messagequeue.messageIn.ReRegisterSessionUserMessage;
+import com.example.section.messagequeue.messageIn.SessionCreatedAfterOutDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,10 @@ public class SessionServiceImpl implements  SessionService {
         return MentoringSessionResponseDto.from(mentoringSessionMongoRepository.findBySessionUuid(sessionUuid));
     }
 
+    /**
+     * 1. mentoringUuid 으로 세션 리스트 출력
+     * 2. userUuid 로 참여중인 세션 확인
+     */
     @Override
     public List<MentoringSessionResponseDto> findByMentoringUuidAndDeadlineDate(String mentoringUuid, String userUuid) {
         List<MentoringSession> sessionList = customSessionRepository.findAllByMentoringUuidAndDeadlineDate(mentoringUuid);
@@ -33,14 +38,11 @@ public class SessionServiceImpl implements  SessionService {
 
         boolean isParticipating = false;
         // 세션들을 돌면서 유저가 참여중인 세션인지 체크 한 뒤 Dto 로 변환
-        log.info("조회세션 카운트 = "+ sessionList.size());
         for (MentoringSession session : sessionList) {
             List<SessionUser> sessionUserList = session.getSessionUsers();
             if(userUuid != null && sessionUserList != null) { // userUuid 로 참여중인 세션인지 확인
                 for (SessionUser sessionUser : sessionUserList) {
-                    log.info("target = "+ sessionUser.getUserUuid() +" : " + userUuid);
                     if (sessionUser.getUserUuid().equals(userUuid)) {
-                        log.info("세션 참여중인 유저 발견");
                         isParticipating = true;
                         result.add(setUserParticipatingInfo(session, isParticipating));
                         break;
@@ -58,6 +60,23 @@ public class SessionServiceImpl implements  SessionService {
     @Override
     public void updateSessionToSessionUserRegister(AfterSessionUserOutDto dto) {
          customSessionRepository.updateSessionToSessionUserRegister(dto);
+    }
+
+    @Override
+    public void cancelSessionUser(CancelSessionUserMessage dto) {
+        customSessionRepository.cancelSessionUser(dto);
+    }
+
+    @Override
+    public void reRegisterSessionUser(ReRegisterSessionUserMessage dto) {
+        customSessionRepository.reRegisterSessionUser(dto);
+    }
+
+    @Override
+    public void addSession(SessionCreatedAfterOutDto dto) {
+        List<MentoringSession> sessionEntities = dto.toSessionEntities();
+        sessionEntities.forEach(MentoringSession::initNowHeadCountAndIsConfirmed);
+        mentoringSessionMongoRepository.saveAll(sessionEntities);
     }
 
     private MentoringSessionResponseDto setUserParticipatingInfo(MentoringSession session, boolean isParticipating) {

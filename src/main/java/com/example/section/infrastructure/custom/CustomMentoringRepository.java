@@ -1,6 +1,6 @@
 package com.example.section.infrastructure.custom;
 
-import com.example.section.dto.messageIn.MentoringEditRequestOutDto;
+import com.example.section.messagequeue.messageIn.MentoringEditRequestOutDto;
 import com.example.section.entity.Mentoring;
 
 import java.util.List;
@@ -8,9 +8,9 @@ import java.util.List;
 public interface CustomMentoringRepository {
     void updateMentoring(MentoringEditRequestOutDto mentoringEditRequestDto);
 
-    List<Mentoring> getReusableMentoringListByMentorUuid(String mentorUuid);
+    List<Mentoring> getReusableMentoringListByMentorUuid(String userUuid);
 
     // mentorUuid로 삭제되지 않은 멘토링 조회
-    List<Mentoring> findAllByMentorUuidAndIsDeletedFalse(String mentorUuid);
+    List<Mentoring> findAllByMentorUuidAndIsDeletedFalse(String userUuid);
 
 }

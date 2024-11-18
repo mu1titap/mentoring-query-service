@@ -1,4 +1,4 @@
-package com.example.section.dto.messageIn;
+package com.example.section.messagequeue.messageIn;
 
 import com.example.section.entity.vo.SessionUser;
 import lombok.*;

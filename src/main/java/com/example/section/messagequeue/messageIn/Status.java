@@ -1,4 +1,4 @@
-package com.example.section.dto.messageIn;
+package com.example.section.messagequeue.messageIn;
 
 import lombok.Getter;
 

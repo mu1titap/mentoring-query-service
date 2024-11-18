@@ -1,6 +1,6 @@
 package com.example.section.infrastructure.custom;
 
-import com.example.section.dto.messageIn.MentoringEditRequestOutDto;
+import com.example.section.messagequeue.messageIn.MentoringEditRequestOutDto;
 import com.example.section.entity.Mentoring;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -40,9 +40,9 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
     }
 
     @Override
-    public List<Mentoring> getReusableMentoringListByMentorUuid(String mentorUuid) {
+    public List<Mentoring> getReusableMentoringListByMentorUuid(String userUuid) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("mentorUuid").is(mentorUuid));
+        query.addCriteria(Criteria.where("mentorUuid").is(userUuid));
         query.addCriteria(Criteria.where("isReusable").is(true));
         query.addCriteria(Criteria.where("isDeleted").is(false));
         query.with(Sort.by(Sort.Direction.DESC, "updatedAt"));
@@ -51,9 +51,9 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
     }
 
     @Override
-    public List<Mentoring> findAllByMentorUuidAndIsDeletedFalse(String mentorUuid) {
+    public List<Mentoring> findAllByMentorUuidAndIsDeletedFalse(String userUuid) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("mentorUuid").is(mentorUuid));
+        query.addCriteria(Criteria.where("mentorUuid").is(userUuid));
         query.addCriteria(Criteria.where("isDeleted").is(false));
         query.with(Sort.by(Sort.Direction.DESC, "updatedAt"));
 
