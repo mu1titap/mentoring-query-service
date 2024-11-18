@@ -1,6 +1,6 @@
 package com.example.section.dto.out;
 
-import com.example.section.dto.messageIn.MentoringCategoryAfterOutDto;
+import com.example.section.messagequeue.messageIn.MentoringCategoryAfterOutDto;
 import com.example.section.entity.Mentoring;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

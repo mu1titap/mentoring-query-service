@@ -32,18 +32,18 @@ public class MentoringController {
             ,tags = {"멘토링"})
     @GetMapping("/reusable-mentoring-list/{mentorUuid}")
     public BaseResponse<List<MentoringReusableResponseDto>> searchReusableMentoringList(
-            @PathVariable("mentorUuid") String mentorUuid)
+            @RequestHeader("userUuid") String userUuid)
     {
-        return new BaseResponse<>(mentoringQueryService.getReusableMentoringListByMentorUuid(mentorUuid));
+        return new BaseResponse<>(mentoringQueryService.getReusableMentoringListByMentorUuid(userUuid));
     }
 
     @Operation(summary = "멘토uuid로 멘토링 리스트 조회" , description = "멘토 UUID 로 삭제되지 않은 멘토링 리스트 조회"
             ,tags = {"멘토링"} )
     @GetMapping("/mentoring-list/{mentorUuid}")
     public BaseResponse<List<Mentoring>> searchMentoringListByMentorUuid(
-            @PathVariable("mentorUuid") String mentorUuid)
+            @RequestHeader("userUuid") String userUuid)
     {
-        return new BaseResponse<>(mentoringQueryService.findAllByMentorUuidAndIsDeletedFalse(mentorUuid));
+        return new BaseResponse<>(mentoringQueryService.findAllByMentorUuidAndIsDeletedFalse(userUuid));
     }
 
     @Operation(summary = "멘토링 세션 리스트 조회 (멘토링uuid, 유저uuid)"
@@ -54,7 +54,7 @@ public class MentoringController {
     @GetMapping("/session-list")
     public BaseResponse<List<MentoringSessionResponseDto>> getMentoringSessions(
             @RequestParam("mentoringUuid") String mentoringUuid ,
-            @RequestParam(value = "userUuid", required = false) String userUuid
+            @RequestHeader(value = "userUuid", required = false) String userUuid
     )
     {
         return new BaseResponse<>(sessionService.findByMentoringUuidAndDeadlineDate(mentoringUuid,userUuid));

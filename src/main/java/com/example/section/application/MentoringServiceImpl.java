@@ -1,10 +1,9 @@
 package com.example.section.application;
 
-import com.example.section.dto.messageIn.MentoringAddAfterOutDto;
-import com.example.section.dto.messageIn.MentoringEditRequestOutDto;
+import com.example.section.messagequeue.messageIn.MentoringAddAfterOutDto;
+import com.example.section.messagequeue.messageIn.MentoringEditRequestOutDto;
 import com.example.section.dto.out.MentoringResponseDto;
 import com.example.section.dto.out.MentoringReusableResponseDto;
-import com.example.section.dto.out.MentoringSessionResponseDto;
 import com.example.section.entity.Mentoring;
 import com.example.section.entity.MentoringSession;
 import com.example.section.infrastructure.MentoringMongoRepository;
@@ -33,23 +32,26 @@ public class MentoringServiceImpl implements MentoringService {
         // 멘토링+카테고리 저장
         mentoringMongoRepository.save(dto.toMongoMentoringEntity());
         // 멘토링 세션 저장
-        List<MentoringSession> mongoSessionEntities = dto.toMongoSessionEntities();
-        // 현재모집인원 0 , 세션진행확정 상태 False 로 초기화
-        mongoSessionEntities.forEach(MentoringSession::initNowHeadCountAndIsConfirmed);
-        mentoringSessionMongoRepository.saveAll(mongoSessionEntities);
+        if(dto.getMentoringSessionAddAfterOutDtoList() != null){
+            List<MentoringSession> mongoSessionEntities = dto.toMongoSessionEntities();
+            // 현재모집인원 0 , 세션진행확정 상태 False 로 초기화
+            mongoSessionEntities.forEach(MentoringSession::initNowHeadCountAndIsConfirmed);
+            mentoringSessionMongoRepository.saveAll(mongoSessionEntities);
+        }
+
     }
 
     @Override
-    public List<MentoringReusableResponseDto> getReusableMentoringListByMentorUuid(String mentorUuid) {
-        return customMentoringRepository.getReusableMentoringListByMentorUuid(mentorUuid)
+    public List<MentoringReusableResponseDto> getReusableMentoringListByMentorUuid(String userUuid) {
+        return customMentoringRepository.getReusableMentoringListByMentorUuid(userUuid)
                 .stream()
                 .map(MentoringReusableResponseDto::toReusableDto)
                 .toList();
     }
 
     @Override
-    public List<Mentoring> findAllByMentorUuidAndIsDeletedFalse(String mentorUuid) {
-        return customMentoringRepository.findAllByMentorUuidAndIsDeletedFalse(mentorUuid);
+    public List<Mentoring> findAllByMentorUuidAndIsDeletedFalse(String userUuid) {
+        return customMentoringRepository.findAllByMentorUuidAndIsDeletedFalse(userUuid);
     }
 
 

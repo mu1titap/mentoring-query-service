@@ -1,6 +1,6 @@
 package com.example.section.entity;
 
-import com.example.section.dto.messageIn.MentoringCategoryAfterOutDto;
+import com.example.section.messagequeue.messageIn.MentoringCategoryAfterOutDto;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

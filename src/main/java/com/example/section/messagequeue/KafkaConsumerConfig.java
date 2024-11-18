@@ -1,7 +1,5 @@
 package com.example.section.messagequeue;
-import com.example.section.dto.messageIn.AfterSessionUserOutDto;
-import com.example.section.dto.messageIn.MentoringAddAfterOutDto;
-import com.example.section.dto.messageIn.MentoringEditRequestOutDto;
+import com.example.section.messagequeue.messageIn.*;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;
@@ -76,6 +74,60 @@ public class KafkaConsumerConfig {
     public ConcurrentKafkaListenerContainerFactory<String, AfterSessionUserOutDto> afterSessionUserOutDtoListener() {
         ConcurrentKafkaListenerContainerFactory<String, AfterSessionUserOutDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(sessionUserConsumerFactory());
+        return factory;
+    }
+
+    // 멘토링 세션 참가 취소
+    @Bean
+    public ConsumerFactory<String, CancelSessionUserMessage> cancelSessionUserConsumerFactory(){
+        Map<String, Object> props = new HashMap<>();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:29092, localhost:39092, localhost:49092");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "kafka-mentoring-query-service");
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+        props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
+        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), new JsonDeserializer<>(CancelSessionUserMessage.class, false));
+    }
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, CancelSessionUserMessage> cancelSessionUserOutDtoListener() {
+        ConcurrentKafkaListenerContainerFactory<String, CancelSessionUserMessage> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(cancelSessionUserConsumerFactory());
+        return factory;
+    }
+
+    // 멘토링 세션 '재' 참가 등록
+    @Bean
+    public ConsumerFactory<String, ReRegisterSessionUserMessage> reRegisterSessionUserConsumerFactory(){
+        Map<String, Object> props = new HashMap<>();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:29092, localhost:39092, localhost:49092");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "kafka-mentoring-query-service");
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+        props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
+        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), new JsonDeserializer<>(ReRegisterSessionUserMessage.class, false));
+    }
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, ReRegisterSessionUserMessage> reRegisterSessionUserOutDtoListener() {
+        ConcurrentKafkaListenerContainerFactory<String, ReRegisterSessionUserMessage> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(reRegisterSessionUserConsumerFactory());
+        return factory;
+    }
+
+    // 세션 추가
+    @Bean
+    public ConsumerFactory<String, SessionCreatedAfterOutDto> addSessionConsumerFactory(){
+        Map<String, Object> props = new HashMap<>();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:29092, localhost:39092, localhost:49092");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "kafka-mentoring-query-service");
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+        props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
+        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), new JsonDeserializer<>(SessionCreatedAfterOutDto.class, false));
+    }
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, SessionCreatedAfterOutDto> addSessionUserOutDtoListener() {
+        ConcurrentKafkaListenerContainerFactory<String, SessionCreatedAfterOutDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(addSessionConsumerFactory());
         return factory;
     }
 

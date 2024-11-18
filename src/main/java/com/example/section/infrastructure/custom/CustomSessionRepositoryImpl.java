@@ -1,7 +1,8 @@
 package com.example.section.infrastructure.custom;
 
-import com.example.section.dto.messageIn.AfterSessionUserOutDto;
-import com.example.section.dto.out.MentoringSessionResponseDto;
+import com.example.section.messagequeue.messageIn.AfterSessionUserOutDto;
+import com.example.section.messagequeue.messageIn.CancelSessionUserMessage;
+import com.example.section.messagequeue.messageIn.ReRegisterSessionUserMessage;
 import com.example.section.entity.MentoringSession;
 import com.example.section.entity.vo.SessionUser;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,36 @@ public class CustomSessionRepositoryImpl implements CustomSessionRepository {
         update.push("sessionUsers", dto.toSessionUserValueObject());
         update.set("updatedAt", LocalDate.now());
         if (dto.getIsClosed()) {
+            update.set("isClosed",true);
+        }
+        mongoTemplate.updateFirst(query, update, MentoringSession.class);
+    }
+
+    @Override
+    public void cancelSessionUser(CancelSessionUserMessage dto) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("sessionUuid").is(dto.getSessionUuid()));
+        // 현재인원수, 세션 닫힘 상태, 세션유저리스트(only userUuid) 업데이트
+        Update update = new Update();
+        update.inc("nowHeadCount",-1);
+        update.pull("sessionUsers", Query.query(Criteria.where("userUuid").is(dto.getMenteeUuid())));
+        update.set("updatedAt", LocalDate.now());
+        if (dto.getShouldOpenSession()) {
+            update.set("isClosed",false);
+        }
+        mongoTemplate.updateFirst(query, update, MentoringSession.class);
+    }
+
+    @Override
+    public void reRegisterSessionUser(ReRegisterSessionUserMessage dto) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("sessionUuid").is(dto.getSessionUuid()));
+        // 현재인원수, 세션 닫힘 상태, 세션유저리스트(only userUuid) 업데이트
+        Update update = new Update();
+        update.inc("nowHeadCount",1);
+        update.push("sessionUsers", SessionUser.builder().userUuid(dto.getMenteeUuid().trim()).build());
+        update.set("updatedAt", LocalDate.now());
+        if (dto.getShouldCloseSession()) {
             update.set("isClosed",true);
         }
         mongoTemplate.updateFirst(query, update, MentoringSession.class);
