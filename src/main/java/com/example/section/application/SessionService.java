@@ -1,10 +1,7 @@
 package com.example.section.application;
 
 import com.example.section.dto.out.MentoringSessionResponseDto;
-import com.example.section.messagequeue.messageIn.AfterSessionUserOutDto;
-import com.example.section.messagequeue.messageIn.CancelSessionUserMessage;
-import com.example.section.messagequeue.messageIn.ReRegisterSessionUserMessage;
-import com.example.section.messagequeue.messageIn.SessionCreatedAfterOutDto;
+import com.example.section.messagequeue.messageIn.*;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -25,4 +22,7 @@ public interface SessionService {
 
     @Transactional
     void addSession(SessionCreatedAfterOutDto dto);
+
+    @Transactional
+    void updateSessionConfirmed(SessionConfirmedMessage dto);
 }

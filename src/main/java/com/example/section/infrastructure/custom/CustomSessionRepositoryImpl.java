@@ -5,6 +5,7 @@ import com.example.section.messagequeue.messageIn.CancelSessionUserMessage;
 import com.example.section.messagequeue.messageIn.ReRegisterSessionUserMessage;
 import com.example.section.entity.MentoringSession;
 import com.example.section.entity.vo.SessionUser;
+import com.example.section.messagequeue.messageIn.SessionConfirmedMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -75,6 +76,17 @@ public class CustomSessionRepositoryImpl implements CustomSessionRepository {
                 .and("deadlineDate").gte(LocalDate.now()) // 오늘 까지의 데이터 조회 >=
         );
         return mongoTemplate.find(query, MentoringSession.class);
+    }
+
+    @Override
+    public void updateSessionConfirmed(SessionConfirmedMessage dto) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("sessionUuid").is(dto.getSessionUuid()));
+        // 현재인원수, 세션 닫힘 상태, 세션유저리스트(only userUuid) 업데이트
+        Update update = new Update();
+        update.set("updatedAt", LocalDate.now());
+        update.set("isConfirmed",dto.getSessionIsConfirmed());
+        mongoTemplate.updateFirst(query, update, MentoringSession.class);
     }
 
 }
