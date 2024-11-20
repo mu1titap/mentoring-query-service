@@ -5,10 +5,7 @@ import com.example.section.entity.MentoringSession;
 import com.example.section.entity.vo.SessionUser;
 import com.example.section.infrastructure.MentoringSessionMongoRepository;
 import com.example.section.infrastructure.custom.CustomSessionRepository;
-import com.example.section.messagequeue.messageIn.AfterSessionUserOutDto;
-import com.example.section.messagequeue.messageIn.CancelSessionUserMessage;
-import com.example.section.messagequeue.messageIn.ReRegisterSessionUserMessage;
-import com.example.section.messagequeue.messageIn.SessionCreatedAfterOutDto;
+import com.example.section.messagequeue.messageIn.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -77,6 +74,11 @@ public class SessionServiceImpl implements  SessionService {
         List<MentoringSession> sessionEntities = dto.toSessionEntities();
         sessionEntities.forEach(MentoringSession::initNowHeadCountAndIsConfirmed);
         mentoringSessionMongoRepository.saveAll(sessionEntities);
+    }
+
+    @Override
+    public void updateSessionConfirmed(SessionConfirmedMessage dto) {
+        customSessionRepository.updateSessionConfirmed(dto);
     }
 
     private MentoringSessionResponseDto setUserParticipatingInfo(MentoringSession session, boolean isParticipating) {
