@@ -38,9 +38,10 @@ public class SessionServiceImpl implements  SessionService {
                                                                     .toList();
         List<MentoringSessionResponseDto> result = new ArrayList<>();
 
-        boolean isParticipating = false;
+        boolean isParticipating;
         // 세션들을 돌면서 유저가 참여중인 세션인지 체크 한 뒤 Dto 로 변환
         for (MentoringSession session : sessionList) {
+            isParticipating = false;
             // 세션의 참가자 리스트
             List<SessionUser> sessionUserList = session.getSessionUsers();
             if(userUuid != null && sessionUserList != null && !sessionUserList.isEmpty()) { // userUuid 로 참여중인 세션인지 확인
