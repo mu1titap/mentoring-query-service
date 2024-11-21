@@ -36,7 +36,7 @@ public class MentoringResponseDto {
     private List<MentoringCategoryResponseDto> categoryList;
 
     public static MentoringResponseDto fromEntity(Mentoring mentoring) {
-        return MentoringResponseDto.builder()
+        return mentoring != null ? MentoringResponseDto.builder()
                 .mentoringUuid(mentoring.getMentoringUuid())
                 .name(mentoring.getName())
                 .detail(mentoring.getDetail())
@@ -47,13 +47,13 @@ public class MentoringResponseDto {
                 .createdAt(mentoring.getCreatedAt())
                 .updatedAt(mentoring.getUpdatedAt())
                 .categoryList(from(mentoring.getMentoringCategoryList()))
-                .build();
+                .build() : null;
     }
 
     public static List<MentoringCategoryResponseDto> from(
             List<MentoringCategoryAfterOutDto> mentoringCategories)
     {
-        return mentoringCategories.stream()
+        return mentoringCategories != null ? mentoringCategories.stream()
                 .map(categoryResponse -> MentoringCategoryResponseDto.builder()
                         .topCategoryCode(categoryResponse.getTopCategoryCode())
                         .middleCategoryCode(categoryResponse.getMiddleCategoryCode())
@@ -62,6 +62,6 @@ public class MentoringResponseDto {
                         .middleCategoryName(categoryResponse.getMiddleCategoryName())
                         .bottomCategoryName(categoryResponse.getBottomCategoryName())
                         .build())
-                .toList();
+                .toList() : null;
     }
 }
