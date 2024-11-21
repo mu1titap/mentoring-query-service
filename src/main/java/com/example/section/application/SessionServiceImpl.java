@@ -11,6 +11,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -30,14 +31,19 @@ public class SessionServiceImpl implements  SessionService {
      */
     @Override
     public List<MentoringSessionResponseDto> findByMentoringUuidAndDeadlineDate(String mentoringUuid, String userUuid) {
-        List<MentoringSession> sessionList = customSessionRepository.findAllByMentoringUuidAndDeadlineDate(mentoringUuid);
+        List<MentoringSession> sessionList = customSessionRepository.findAllByMentoringUuidAndDeadlineDate(mentoringUuid)
+                                                                    .stream()
+                                                                    .sorted(Comparator.comparing(MentoringSession::getStartDate)
+                                                                            .thenComparing(MentoringSession::getStartTime))
+                                                                    .toList();
         List<MentoringSessionResponseDto> result = new ArrayList<>();
 
         boolean isParticipating = false;
         // 세션들을 돌면서 유저가 참여중인 세션인지 체크 한 뒤 Dto 로 변환
         for (MentoringSession session : sessionList) {
+            // 세션의 참가자 리스트
             List<SessionUser> sessionUserList = session.getSessionUsers();
-            if(userUuid != null && sessionUserList != null) { // userUuid 로 참여중인 세션인지 확인
+            if(userUuid != null && sessionUserList != null && !sessionUserList.isEmpty()) { // userUuid 로 참여중인 세션인지 확인
                 for (SessionUser sessionUser : sessionUserList) {
                     if (sessionUser.getUserUuid().equals(userUuid)) {
                         isParticipating = true;
@@ -48,7 +54,6 @@ public class SessionServiceImpl implements  SessionService {
             }
             else result.add(setUserParticipatingInfo(session, isParticipating));
         }
-
         return result;
 
     }

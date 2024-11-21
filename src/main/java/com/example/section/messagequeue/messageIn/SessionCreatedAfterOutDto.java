@@ -36,6 +36,8 @@ public class SessionCreatedAfterOutDto {
                         .price(sessionAddAfterOutDto.getPrice())
                         .isClosed(sessionAddAfterOutDto.getIsClosed())
                         .isDeleted(sessionAddAfterOutDto.getIsDeleted())
+                        .createdAt(sessionAddAfterOutDto.getCreatedAt())
+                        .updatedAt(sessionAddAfterOutDto.getUpdatedAt())
                         .build())
                 .toList();
     }
