@@ -53,7 +53,7 @@ public class MentoringResponseDto {
     public static List<MentoringCategoryResponseDto> from(
             List<MentoringCategoryAfterOutDto> mentoringCategories)
     {
-        return mentoringCategories.stream()
+        return mentoringCategories != null ? mentoringCategories.stream()
                 .map(categoryResponse -> MentoringCategoryResponseDto.builder()
                         .topCategoryCode(categoryResponse.getTopCategoryCode())
                         .middleCategoryCode(categoryResponse.getMiddleCategoryCode())
@@ -62,6 +62,6 @@ public class MentoringResponseDto {
                         .middleCategoryName(categoryResponse.getMiddleCategoryName())
                         .bottomCategoryName(categoryResponse.getBottomCategoryName())
                         .build())
-                .toList();
+                .toList() : null;
     }
 }
