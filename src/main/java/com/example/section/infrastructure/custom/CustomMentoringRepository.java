@@ -13,4 +13,6 @@ public interface CustomMentoringRepository {
     // mentorUuid로 삭제되지 않은 멘토링 조회
     List<Mentoring> findAllByMentorUuidAndIsDeletedFalse(String userUuid);
 
+    List<Mentoring> findAllByCategoryCodes(String topCategoryCode, String middleCategoryCode, String bottomCategoryCode);
+
 }

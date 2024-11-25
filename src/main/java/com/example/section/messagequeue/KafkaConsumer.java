@@ -74,6 +74,9 @@ public class KafkaConsumer {
         log.info("멘토링 세션 참가 등록 '취소' 이벤트 업데이트 완료");
     }
 
+    /**
+     * 세션 확정
+     */
     @KafkaListener(topics = "update-session-confirmed", groupId = "kafka-mentoring-query-service",
             containerFactory = "sessionConfirmedListener")
     public void updateSessionConfirmed(SessionConfirmedMessage dto) {

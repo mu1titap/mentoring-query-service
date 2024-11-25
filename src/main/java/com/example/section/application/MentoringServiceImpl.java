@@ -28,6 +28,14 @@ public class MentoringServiceImpl implements MentoringService {
     }
 
     @Override
+    public List<MentoringResponseDto> findAllByCategoryCodes(String topCategoryCode, String middleCategoryCode, String bottomCategoryCode) {
+        return customMentoringRepository.findAllByCategoryCodes(topCategoryCode, middleCategoryCode, bottomCategoryCode)
+                .stream()
+                .map(MentoringResponseDto::fromEntity)
+                .toList();
+    }
+
+    @Override
     public void createMentoringWithSession(MentoringAddAfterOutDto dto) {
         // 멘토링+카테고리 저장
         mentoringMongoRepository.save(dto.toMongoMentoringEntity());

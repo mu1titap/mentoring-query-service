@@ -14,6 +14,8 @@ public interface MentoringService {
 
     MentoringResponseDto getMentoringByMentoringUuid(String mentoringUuid);
 
+    List<MentoringResponseDto> findAllByCategoryCodes(String topCategoryCode, String middleCategoryCode, String bottomCategoryCode);
+
     List<MentoringReusableResponseDto> getReusableMentoringListByMentorUuid(String userUuid);
 
     // todo : dto로 변환해서 내보내자

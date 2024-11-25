@@ -60,5 +60,16 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
         return new ArrayList<>(mongoTemplate.find(query, Mentoring.class));
     }
 
+    @Override
+    public List<Mentoring> findAllByCategoryCodes(String topCategoryCode, String middleCategoryCode, String bottomCategoryCode) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("mentoringCategoryList.topCategoryCode").is(topCategoryCode));
+        if(middleCategoryCode != null) query.addCriteria(Criteria.where("mentoringCategoryList.middleCategoryCode").is(middleCategoryCode));
+        if(bottomCategoryCode != null) query.addCriteria(Criteria.where("mentoringCategoryList.topCategoryName").is(bottomCategoryCode));
+        query.addCriteria(Criteria.where("isDeleted").is(false));
+
+        return new ArrayList<>(mongoTemplate.find(query, Mentoring.class));
+    }
+
 
 }

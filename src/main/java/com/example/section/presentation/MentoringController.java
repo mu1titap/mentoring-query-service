@@ -28,6 +28,17 @@ public class MentoringController {
         return new BaseResponse<>(mentoringQueryService.getMentoringByMentoringUuid(mentoringUuid));
     }
 
+    @Operation(summary = "멘토링 카테고리 코드로 조회" , description = "카테고리 코드로 조회 <br/>" +
+            "topCategoryCode 만 필수, middleCategoryCode, bottomCategoryCode 는 선택"
+            ,tags = {"멘토링"})
+    @GetMapping("mentoring/by-category")
+    public BaseResponse<List<MentoringResponseDto> > findAllByCategoryCodes(
+            @RequestParam(name = "topCategoryCode") String topCategoryCode,
+            @RequestParam(name = "middleCategoryCode",required = false) String middleCategoryCode,
+            @RequestParam(name = "bottomCategoryCode", required = false) String bottomCategoryCode
+    ) {
+        return new BaseResponse<>(mentoringQueryService.findAllByCategoryCodes(topCategoryCode, middleCategoryCode, bottomCategoryCode));
+    }
     @Operation(summary = "멘토 uuid로 재사용 등록한 멘토링 리스트 조회" , description = "멘토 UUID 로 재사용 가능한 멘토링 리스트 조회"
             ,tags = {"멘토링"})
     @GetMapping("/reusable-mentoring-list/{mentorUuid}")
