@@ -25,6 +25,8 @@ public class MentoringSession {
 
     private String mentoringId;
     private String mentoringUuid;
+    private String mentoringName;
+    private String mentorUuid;
 
     private LocalDate startDate;
     private LocalDate endDate;

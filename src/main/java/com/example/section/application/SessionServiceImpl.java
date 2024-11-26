@@ -1,6 +1,7 @@
 package com.example.section.application;
 
 import com.example.section.dto.out.MentoringSessionResponseDto;
+import com.example.section.dto.out.SessionRoomResponseDto;
 import com.example.section.entity.MentoringSession;
 import com.example.section.entity.vo.SessionUser;
 import com.example.section.infrastructure.MentoringSessionMongoRepository;
@@ -31,13 +32,9 @@ public class SessionServiceImpl implements  SessionService {
      */
     @Override
     public List<MentoringSessionResponseDto> findByMentoringUuidAndDeadlineDate(String mentoringUuid, String userUuid) {
-        List<MentoringSession> sessionList = customSessionRepository.findAllByMentoringUuidAndDeadlineDate(mentoringUuid)
-                                                                    .stream()
-                                                                    .sorted(Comparator.comparing(MentoringSession::getStartDate)
-                                                                            .thenComparing(MentoringSession::getStartTime))
-                                                                    .toList();
-        List<MentoringSessionResponseDto> result = new ArrayList<>();
+        List<MentoringSession> sessionList = customSessionRepository.findAllByMentoringUuidAndDeadlineDate(mentoringUuid);
 
+        List<MentoringSessionResponseDto> result = new ArrayList<>();
         boolean isParticipating;
         // 세션들을 돌면서 유저가 참여중인 세션인지 체크 한 뒤 Dto 로 변환
         for (MentoringSession session : sessionList) {
@@ -59,6 +56,17 @@ public class SessionServiceImpl implements  SessionService {
 
     }
 
+    @Override
+    public SessionRoomResponseDto findSessionRoomBySessionUuid(String sessionUuid) {
+        return SessionRoomResponseDto.from(mentoringSessionMongoRepository.findBySessionUuid(sessionUuid));
+    }
+
+    @Override
+    public String getMentorUuidBySessionUuid(String sessionUuid) {
+        MentoringSession session = mentoringSessionMongoRepository.findBySessionUuid(sessionUuid);
+        return session != null ? session.getMentorUuid() : null;
+    }
+
 
     @Override
     public void updateSessionToSessionUserRegister(AfterSessionUserOutDto dto) {
@@ -77,6 +85,10 @@ public class SessionServiceImpl implements  SessionService {
 
     @Override
     public void addSession(SessionCreatedAfterOutDto dto) {
+        // 멘토링 read data update
+        int addSessionCount = dto.getSessionAddAfterOutDtos().size();
+
+        // 세션 read date save
         List<MentoringSession> sessionEntities = dto.toSessionEntities();
         sessionEntities.forEach(MentoringSession::initNowHeadCountAndIsConfirmed);
         mentoringSessionMongoRepository.saveAll(sessionEntities);

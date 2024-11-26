@@ -27,7 +27,6 @@ dependencies {
 	// swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
 	// kafka
-	//implementation 'org.springframework.kafka:spring-kafka:3.7.0'
 	implementation 'org.springframework.kafka:spring-kafka'
 	// mongodb
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'

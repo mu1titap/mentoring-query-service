@@ -1,5 +1,6 @@
 package com.example.section.application;
 
+import com.example.section.dto.out.MentoringCoreInfoResponseDto;
 import com.example.section.messagequeue.messageIn.MentoringAddAfterOutDto;
 import com.example.section.messagequeue.messageIn.MentoringEditRequestOutDto;
 import com.example.section.dto.out.MentoringResponseDto;
@@ -28,9 +29,19 @@ public class MentoringServiceImpl implements MentoringService {
     }
 
     @Override
+    public List<MentoringResponseDto> findAllByCategoryCodes(String topCategoryCode, String middleCategoryCode, String bottomCategoryCode) {
+        return customMentoringRepository.findAllByCategoryCodes(topCategoryCode, middleCategoryCode, bottomCategoryCode)
+                .stream()
+                .map(MentoringResponseDto::fromEntity)
+                .toList();
+    }
+
+    @Override
     public void createMentoringWithSession(MentoringAddAfterOutDto dto) {
+
         // 멘토링+카테고리 저장
-        mentoringMongoRepository.save(dto.toMongoMentoringEntity());
+        int sessionCount = dto.getMentoringSessionAddAfterOutDtoList().size();
+        mentoringMongoRepository.save(dto.toMongoMentoringEntity(sessionCount));
         // 멘토링 세션 저장
         if(dto.getMentoringSessionAddAfterOutDtoList() != null){
             List<MentoringSession> mongoSessionEntities = dto.toMongoSessionEntities();
@@ -50,8 +61,8 @@ public class MentoringServiceImpl implements MentoringService {
     }
 
     @Override
-    public List<Mentoring> findAllByMentorUuidAndIsDeletedFalse(String userUuid) {
-        return customMentoringRepository.findAllByMentorUuidAndIsDeletedFalse(userUuid);
+    public List<MentoringCoreInfoResponseDto> findAllByMentorUuidAndIsDeletedFalse(String userUuid) {
+        return customMentoringRepository.findAllByMentorUuidAndIsDeletedFalse(userUuid).stream().map(MentoringCoreInfoResponseDto::from).toList();
     }
 
 
@@ -60,6 +71,20 @@ public class MentoringServiceImpl implements MentoringService {
         customMentoringRepository.updateMentoring(mentoringEditRequestOutDto);
     }
 
+    @Override
+    public void increaseNowSessionCount(String mentoringUuid, int count) {
+        customMentoringRepository.increaseNowSessionCount(mentoringUuid, count);
+    }
+
+    @Override
+    public void decreaseNowSessionCountByUuid(String mentoringUuid, int count) {
+        customMentoringRepository.decreaseNowSessionCountByUuid(mentoringUuid, count);
+    }
+
+    @Override
+    public void decreaseNowSessionCountById(String mentoringId, int count) {
+        customMentoringRepository.decreaseNowSessionCountById(mentoringId, count);
+    }
 
 
 }

@@ -3,6 +3,7 @@ package com.example.section.messagequeue.messageIn;
 import com.example.section.entity.MentoringSession;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -17,13 +18,15 @@ public class SessionCreatedAfterOutDto {
     private String mentorUuid;
     private String mentoringName;
 
-    List<SessionAddAfterOutDto> sessionAddAfterOutDtos;
+    List<SessionAddAfterOutDto> sessionAddAfterOutDtos = new ArrayList<>();
 
     public List<MentoringSession> toSessionEntities() {
         return sessionAddAfterOutDtos.stream()
                 .map(sessionAddAfterOutDto -> MentoringSession.builder()
-                        .mentoringId(mentoringId)
-                        .mentoringUuid(mentoringUuid)
+                        .mentoringId(this.mentoringId)
+                        .mentoringUuid(this.mentoringUuid)
+                        .mentoringName(this.mentoringName)
+                        .mentorUuid(this.mentorUuid)
                         .sessionId(sessionAddAfterOutDto.getSessionId())
                         .sessionUuid(sessionAddAfterOutDto.getSessionUuid())
                         .startDate(sessionAddAfterOutDto.getStartDate())
