@@ -22,6 +22,7 @@ public class KafkaConsumer {
     @KafkaListener(topics = "create-mentoring", groupId = "kafka-mentoring-query-service",
                                                 containerFactory = "mentoringAddAfterDtoListener")
     public void createMentoring(MentoringAddAfterOutDto dto) {
+        log.info("멘토링 생성 이벤트 컨슘 + dto = "+dto);
         // 멘토링 저장
         mentoringService.createMentoringWithSession(dto);
     }
