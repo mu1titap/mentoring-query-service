@@ -1,5 +1,6 @@
 package com.example.section.application;
 
+import com.example.section.dto.out.MentoringCoreInfoResponseDto;
 import com.example.section.messagequeue.messageIn.MentoringAddAfterOutDto;
 import com.example.section.messagequeue.messageIn.MentoringEditRequestOutDto;
 import com.example.section.dto.out.MentoringResponseDto;
@@ -19,12 +20,19 @@ public interface MentoringService {
     List<MentoringReusableResponseDto> getReusableMentoringListByMentorUuid(String userUuid);
 
     // todo : dto로 변환해서 내보내자
-    List<Mentoring> findAllByMentorUuidAndIsDeletedFalse(String userUuid);
+    List<MentoringCoreInfoResponseDto> findAllByMentorUuidAndIsDeletedFalse(String userUuid);
 
     @Transactional
     void createMentoringWithSession(MentoringAddAfterOutDto mentoringAddAfterDto);
     @Transactional
     void updateMentoring(MentoringEditRequestOutDto mentoringEditRequestOutDto);
 
+    @Transactional
+    void increaseNowSessionCount(String mentoringUuid, int count);
+    @Transactional
+    void decreaseNowSessionCountByUuid(String mentoringUuid, int count);
+
+    @Transactional
+    void decreaseNowSessionCountById(String mentoringId, int count);
 
 }

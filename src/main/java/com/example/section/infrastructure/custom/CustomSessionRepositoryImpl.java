@@ -8,6 +8,7 @@ import com.example.section.entity.vo.SessionUser;
 import com.example.section.messagequeue.messageIn.SessionConfirmedMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -75,6 +76,8 @@ public class CustomSessionRepositoryImpl implements CustomSessionRepository {
                 .and("isDeleted").is(false) // 삭제되지 않은 세션
                 .and("deadlineDate").gte(LocalDate.now()) // 오늘 까지의 데이터 조회 >=
         );
+        query.with(Sort.by(Sort.Order.asc("startDate"))
+        .and(Sort.by(Sort.Order.asc( "startTime"))));
         return mongoTemplate.find(query, MentoringSession.class);
     }
 

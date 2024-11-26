@@ -5,6 +5,7 @@ import com.example.section.entity.MentoringSession;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -33,11 +34,11 @@ public class MentoringAddAfterOutDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    private List<MentoringSessionAddAfterOutDto> mentoringSessionAddAfterOutDtoList;
+    private List<MentoringSessionAddAfterOutDto> mentoringSessionAddAfterOutDtoList = new ArrayList<>();
 
     private List<MentoringCategoryAfterOutDto> mentoringCategoryAfterOutDtoList;
 
-    public Mentoring toMongoMentoringEntity() {
+    public Mentoring toMongoMentoringEntity(Integer sessionCount) {
         return Mentoring.builder()
                 .mentoringId(this.getMentoringId())
                 .mentoringUuid(this.getMentoringUuid())
@@ -51,6 +52,7 @@ public class MentoringAddAfterOutDto {
                 .createdAt(this.getCreatedAt())
                 .updatedAt(this.getUpdatedAt())
                 .mentoringCategoryList(this.getMentoringCategoryAfterOutDtoList())
+                .nowSessionCount(sessionCount)
                 .build();
     }
     public List<MentoringSession> toMongoSessionEntities() {
@@ -61,6 +63,8 @@ public class MentoringAddAfterOutDto {
                         .sessionId(session.getSessionId())
                         .mentoringId(this.getMentoringId())
                         .mentoringUuid(this.getMentoringUuid())
+                        .mentoringName(this.getName())
+                        .mentorUuid(this.getMentorUuid())
                         .startDate(session.getStartDate())
                         .endDate(session.getEndDate())
                         .startTime(session.getStartTime())

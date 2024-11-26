@@ -37,6 +37,7 @@ public class Mentoring {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    private Integer nowSessionCount;
     private List<MentoringCategoryAfterOutDto> mentoringCategoryList;
 
 }

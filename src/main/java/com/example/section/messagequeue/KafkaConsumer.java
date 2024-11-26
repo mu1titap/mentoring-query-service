@@ -31,6 +31,11 @@ public class KafkaConsumer {
     @KafkaListener(topics = "add-session", groupId = "kafka-mentoring-query-service",
             containerFactory = "addSessionUserOutDtoListener")
     public void addSession(SessionCreatedAfterOutDto dto) {
+        String mentoringUuid = dto.getMentoringUuid();
+        int increaseNowSessionCount = dto.getSessionAddAfterOutDtos().size();
+        // 멘토링 read data 현재 세션카운트 증가
+        mentoringService.increaseNowSessionCount(mentoringUuid, increaseNowSessionCount);
+        // 세션 read data 저장
         sessionService.addSession(dto);
     }
 
@@ -80,7 +85,8 @@ public class KafkaConsumer {
     @KafkaListener(topics = "update-session-confirmed", groupId = "kafka-mentoring-query-service",
             containerFactory = "sessionConfirmedListener")
     public void updateSessionConfirmed(SessionConfirmedMessage dto) {
-        log.info("updateSessionConfirmed : " + dto);
+        // 세션 확정되면 현재 세션카운트 감소 (확정이든 취소든 세션 예약 못하는 거라 똑같이 감소)
+        mentoringService.decreaseNowSessionCountById(dto.getMentoringId(), 1);
         sessionService.updateSessionConfirmed(dto);
     }
 

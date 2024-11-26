@@ -40,6 +40,33 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
     }
 
     @Override
+    public void increaseNowSessionCount(String mentoringUuid, int count) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("mentoringUuid").is(mentoringUuid));
+        Update update = new Update();
+        update.inc("nowSessionCount", count);
+        mongoTemplate.updateFirst(query, update, Mentoring.class);
+    }
+
+    @Override
+    public void decreaseNowSessionCountByUuid(String mentoringUuid, int count) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("mentoringUuid").is(mentoringUuid));
+        Update update = new Update();
+        update.inc("nowSessionCount", -count);
+        mongoTemplate.updateFirst(query, update, Mentoring.class);
+    }
+
+    @Override
+    public void decreaseNowSessionCountById(String mentoringId, int count) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("mentoringId").is(mentoringId));
+        Update update = new Update();
+        update.inc("nowSessionCount", -count);
+        mongoTemplate.updateFirst(query, update, Mentoring.class);
+    }
+
+    @Override
     public List<Mentoring> getReusableMentoringListByMentorUuid(String userUuid) {
         Query query = new Query();
         query.addCriteria(Criteria.where("mentorUuid").is(userUuid));
@@ -55,10 +82,15 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
         Query query = new Query();
         query.addCriteria(Criteria.where("mentorUuid").is(userUuid));
         query.addCriteria(Criteria.where("isDeleted").is(false));
-        query.with(Sort.by(Sort.Direction.DESC, "updatedAt"));
+
+        //query.with(Sort.by(Sort.Direction.DESC, "updatedAt"));
+        query.with(Sort.by(Sort.Order.desc("nowSessionCount").nullsLast())
+                    .and(Sort.by(Sort.Direction.DESC, "updatedAt"))
+        );
 
         return new ArrayList<>(mongoTemplate.find(query, Mentoring.class));
     }
+
 
     @Override
     public List<Mentoring> findAllByCategoryCodes(String topCategoryCode, String middleCategoryCode, String bottomCategoryCode) {
