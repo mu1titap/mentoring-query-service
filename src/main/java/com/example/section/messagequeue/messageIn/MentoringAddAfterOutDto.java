@@ -51,8 +51,8 @@ public class MentoringAddAfterOutDto {
                 .isDeleted(this.getIsDeleted())
                 .createdAt(this.getCreatedAt())
                 .updatedAt(this.getUpdatedAt())
-                .mentoringCategoryList(this.getMentoringCategoryAfterOutDtoList()!=null?
-                        this.getMentoringCategoryAfterOutDtoList() : null)
+                .mentoringCategoryList(this.getMentoringCategoryAfterOutDtoList() != null ?
+                                                this.getMentoringCategoryAfterOutDtoList() : null)
                 .nowSessionCount(sessionCount)
                 .build();
     }
