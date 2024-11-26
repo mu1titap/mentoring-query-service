@@ -34,7 +34,7 @@ public class MentoringAddAfterOutDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    private List<MentoringSessionAddAfterOutDto> mentoringSessionAddAfterOutDtoList = new ArrayList<>();
+    private List<MentoringSessionAddAfterOutDto> mentoringSessionAddAfterOutDtoList;
 
     private List<MentoringCategoryAfterOutDto> mentoringCategoryAfterOutDtoList;
 
@@ -51,7 +51,8 @@ public class MentoringAddAfterOutDto {
                 .isDeleted(this.getIsDeleted())
                 .createdAt(this.getCreatedAt())
                 .updatedAt(this.getUpdatedAt())
-                .mentoringCategoryList(this.getMentoringCategoryAfterOutDtoList())
+                .mentoringCategoryList(this.getMentoringCategoryAfterOutDtoList()!=null?
+                        this.getMentoringCategoryAfterOutDtoList() : null)
                 .nowSessionCount(sessionCount)
                 .build();
     }

@@ -40,7 +40,7 @@ public class MentoringServiceImpl implements MentoringService {
     public void createMentoringWithSession(MentoringAddAfterOutDto dto) {
 
         // 멘토링+카테고리 저장
-        int sessionCount = dto.getMentoringSessionAddAfterOutDtoList().size();
+        int sessionCount = dto.getMentoringSessionAddAfterOutDtoList() == null ? 0 : dto.getMentoringSessionAddAfterOutDtoList().size();
         mentoringMongoRepository.save(dto.toMongoMentoringEntity(sessionCount));
         // 멘토링 세션 저장
         if(dto.getMentoringSessionAddAfterOutDtoList() != null){
