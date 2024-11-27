@@ -1,19 +1,29 @@
 package com.example.section.infrastructure.custom;
 
+import com.example.section.dto.out.MentoringCoreInfoResponseDto;
+import com.example.section.dto.out.MentoringResponseDto;
 import com.example.section.messagequeue.messageIn.MentoringEditRequestOutDto;
 import com.example.section.entity.Mentoring;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.bson.Document;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
+import org.springframework.data.mongodb.core.aggregation.ConditionalOperators;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -78,17 +88,75 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
     }
 
     @Override
-    public List<Mentoring> findAllByMentorUuidAndIsDeletedFalse(String userUuid) {
-        Query query = new Query();
-        query.addCriteria(Criteria.where("mentorUuid").is(userUuid));
-        query.addCriteria(Criteria.where("isDeleted").is(false));
-
-        //query.with(Sort.by(Sort.Direction.DESC, "updatedAt"));
-        query.with(Sort.by(Sort.Order.desc("nowSessionCount").nullsLast())
-                    .and(Sort.by(Sort.Direction.DESC, "updatedAt"))
+    public List<MentoringCoreInfoResponseDto> findAllByMentorUuidAndIsDeletedFalse(String userUuid) {
+        Aggregation aggregation = Aggregation.newAggregation(
+            Aggregation.match(Criteria.where("mentorUuid").is(userUuid)
+                    .and("isDeleted").is(false)),
+            // prioritySort 필드 추가
+            Aggregation.addFields().addField("prioritySort")
+                    .withValue(
+                        ConditionalOperators.when(Criteria.where("nowSessionCount").gt(1))
+                                .then(true)
+                                .otherwise(false)
+                    ).build(),
+            Aggregation.sort(Sort.by(Sort.Order.desc("prioritySort"))
+                    .and(Sort.by(Sort.Order.desc( "updatedAt")))),
+            Aggregation.project("mentoringUuid", "name", "description" , "thumbnailUrl", "prioritySort", "nowSessionCount")
+                    .and("mentoringUuid").as("mentoringUuid")
+                    .and("name").as("name")
+                    .and("description").as("description")
+                    .and("thumbnailUrl").as("thumbnailUrl")
+                    .and("prioritySort").as("isAvailable")
+                    .and("nowSessionCount").as("nowSessionCount")
         );
 
-        return new ArrayList<>(mongoTemplate.find(query, Mentoring.class));
+        return mongoTemplate.aggregate(aggregation, "mentoring", MentoringCoreInfoResponseDto.class)
+                .getMappedResults();
+
+    }
+
+    @Override
+    public Page<MentoringCoreInfoResponseDto> searchMentoringByMentorUuidPagination(String userUuid, Pageable pageable) {
+        Criteria criteria = Criteria.where("mentorUuid").is(userUuid)
+                .and("isDeleted").is(false);
+        Aggregation aggregation = Aggregation.newAggregation(
+                Aggregation.match(criteria),
+                Aggregation.addFields().addField("prioritySort")
+                        .withValue(
+                                ConditionalOperators.when(Criteria.where("nowSessionCount").gt(1))
+                                        .then(true)
+                                        .otherwise(false)
+                        ).build(),
+                Aggregation.sort(Sort.by(Sort.Order.desc("prioritySort"))
+                        .and(Sort.by(Sort.Order.desc( "updatedAt")))),
+                Aggregation.project("mentoringUuid", "name", "description", "thumbnailUrl", "prioritySort", "nowSessionCount")
+                        .and("mentoringUuid").as("mentoringUuid")
+                        .and("name").as("name")
+                        .and("description").as("description")
+                        .and("thumbnailUrl").as("thumbnailUrl")
+                        .and("prioritySort").as("isAvailable")
+                        .and("nowSessionCount").as("nowSessionCount"),
+                // 페이지네이션 처리
+                Aggregation.skip(pageable.getOffset()),
+                Aggregation.limit(pageable.getPageSize())
+        );
+        List<MentoringCoreInfoResponseDto> content = mongoTemplate.aggregate(aggregation, "mentoring", MentoringCoreInfoResponseDto.class)
+                .getMappedResults();
+
+        // 토탈 카운트
+        Aggregation countAggregation = Aggregation.newAggregation(
+                Aggregation.match(criteria),
+                Aggregation.count().as("total")
+        );
+
+        // Total count 계산
+        long total = Optional.ofNullable(mongoTemplate.aggregate(countAggregation, "mentoring", Document.class)
+                        .getUniqueMappedResult())
+                .map(result -> result.get("total"))
+                .map(totalCount -> totalCount instanceof Number ? ((Number) totalCount).longValue() : 0L)
+                .orElse(0L);
+
+        return PageableExecutionUtils.getPage(content, pageable, () -> total);
     }
 
 
@@ -99,9 +167,62 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
         if(middleCategoryCode != null) query.addCriteria(Criteria.where("mentoringCategoryList.middleCategoryCode").is(middleCategoryCode));
         if(bottomCategoryCode != null) query.addCriteria(Criteria.where("mentoringCategoryList.topCategoryName").is(bottomCategoryCode));
         query.addCriteria(Criteria.where("isDeleted").is(false));
-
         return new ArrayList<>(mongoTemplate.find(query, Mentoring.class));
+
+
     }
 
+    @Override
+    public Page<MentoringCoreInfoResponseDto> searchByCategoryCodesPagination(String topCategoryCode, String middleCategoryCode, String bottomCategoryCode,
+                                                                      Pageable pageable) {
+        // 카테고리 검색조건
+        Criteria categoryCriteria = Criteria.where("mentoringCategoryList.topCategoryCode").is(topCategoryCode)
+                .and("isDeleted").is(false);
+        if (middleCategoryCode != null) {
+            categoryCriteria.and("mentoringCategoryList.middleCategoryCode").is(middleCategoryCode);
+        }
+        if (bottomCategoryCode != null) {
+            categoryCriteria.and("mentoringCategoryList.bottomCategoryCode").is(bottomCategoryCode);
+        }
+
+        Aggregation aggregation = Aggregation.newAggregation(
+                Aggregation.match(categoryCriteria),
+                Aggregation.addFields().addField("prioritySort")
+                        .withValue(
+                                ConditionalOperators.when(Criteria.where("nowSessionCount").gt(1))
+                                        .then(true)
+                                        .otherwise(false)
+                        ).build(),
+                Aggregation.sort(Sort.by(Sort.Direction.DESC, "updatedAt")),
+                Aggregation.project("mentoringUuid", "name", "description", "thumbnailUrl", "prioritySort", "nowSessionCount")
+                        .and("mentoringUuid").as("mentoringUuid")
+                        .and("name").as("name")
+                        .and("description").as("description")
+                        .and("thumbnailUrl").as("thumbnailUrl")
+                        .and("prioritySort").as("isAvailable")
+                        .and("nowSessionCount").as("nowSessionCount"),
+                // 페이지네이션 처리
+                Aggregation.skip(pageable.getOffset()),
+                Aggregation.limit(pageable.getPageSize())
+        );
+        List<MentoringCoreInfoResponseDto> content = mongoTemplate.aggregate(aggregation, "mentoring", MentoringCoreInfoResponseDto.class)
+                .getMappedResults();
+
+        // 토탈 카운트
+        Aggregation countAggregation = Aggregation.newAggregation(
+                Aggregation.match(categoryCriteria),
+                Aggregation.count().as("total")
+        );
+
+        // Total count 계산
+        long total = Optional.ofNullable(mongoTemplate.aggregate(countAggregation, "mentoring", Document.class)
+                        .getUniqueMappedResult())
+                .map(result -> result.get("total"))
+                .map(totalCount -> totalCount instanceof Number ? ((Number) totalCount).longValue() : 0L)
+                .orElse(0L);
+
+        return PageableExecutionUtils.getPage(content, pageable, () -> total);
+
+    }
 
 }
