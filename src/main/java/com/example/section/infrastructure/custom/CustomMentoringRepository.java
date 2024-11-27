@@ -1,7 +1,11 @@
 package com.example.section.infrastructure.custom;
 
+import com.example.section.dto.out.MentoringCoreInfoResponseDto;
+import com.example.section.dto.out.MentoringResponseDto;
 import com.example.section.messagequeue.messageIn.MentoringEditRequestOutDto;
 import com.example.section.entity.Mentoring;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -15,8 +19,12 @@ public interface CustomMentoringRepository {
     List<Mentoring> getReusableMentoringListByMentorUuid(String userUuid);
 
     // mentorUuid로 삭제되지 않은 멘토링 조회
-    List<Mentoring> findAllByMentorUuidAndIsDeletedFalse(String userUuid);
+    List<MentoringCoreInfoResponseDto> findAllByMentorUuidAndIsDeletedFalse(String userUuid);
+    Page<MentoringCoreInfoResponseDto> searchMentoringByMentorUuidPagination(String userUuid, Pageable pageable);
 
     List<Mentoring> findAllByCategoryCodes(String topCategoryCode, String middleCategoryCode, String bottomCategoryCode);
+
+    Page<MentoringCoreInfoResponseDto> searchByCategoryCodesPagination(String topCategoryCode, String middleCategoryCode, String bottomCategoryCode, Pageable pageable);
+
 
 }

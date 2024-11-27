@@ -12,6 +12,8 @@ import com.example.section.infrastructure.MentoringSessionMongoRepository;
 import com.example.section.infrastructure.custom.CustomMentoringRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,6 +36,11 @@ public class MentoringServiceImpl implements MentoringService {
                 .stream()
                 .map(MentoringResponseDto::fromEntity)
                 .toList();
+    }
+
+    @Override
+    public Page<MentoringCoreInfoResponseDto> searchByCategoryCodesPagination(String topCategoryCode, String middleCategoryCode, String bottomCategoryCode, Pageable pageable) {
+        return customMentoringRepository.searchByCategoryCodesPagination(topCategoryCode, middleCategoryCode, bottomCategoryCode, pageable);
     }
 
     @Override
@@ -62,7 +69,12 @@ public class MentoringServiceImpl implements MentoringService {
 
     @Override
     public List<MentoringCoreInfoResponseDto> findAllByMentorUuidAndIsDeletedFalse(String userUuid) {
-        return customMentoringRepository.findAllByMentorUuidAndIsDeletedFalse(userUuid).stream().map(MentoringCoreInfoResponseDto::from).toList();
+        return customMentoringRepository.findAllByMentorUuidAndIsDeletedFalse(userUuid);
+    }
+
+    @Override
+    public Page<MentoringCoreInfoResponseDto> searchMentoringByMentorUuidPagination(String userUuid, Pageable pageable) {
+        return customMentoringRepository.searchMentoringByMentorUuidPagination(userUuid, pageable);
     }
 
 
