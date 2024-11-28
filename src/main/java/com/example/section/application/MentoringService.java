@@ -23,8 +23,8 @@ public interface MentoringService {
     List<MentoringReusableResponseDto> getReusableMentoringListByMentorUuid(String userUuid);
 
 
-    List<MentoringCoreInfoResponseDto> findAllByMentorUuidAndIsDeletedFalse(String userUuid);
-    Page<MentoringCoreInfoResponseDto> searchMentoringByMentorUuidPagination(String userUuid, Pageable pageable);
+    List<MentoringCoreInfoResponseDto> findAllByMentorUuidAndIsDeletedFalse(String userUuid , Boolean isMentor);
+    Page<MentoringCoreInfoResponseDto> searchMentoringByMentorUuidPagination(String userUuid, Boolean isMentor, Pageable pageable);
 
     @Transactional
     void createMentoringWithSession(MentoringAddAfterOutDto mentoringAddAfterDto);

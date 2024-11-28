@@ -44,7 +44,6 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
         update.set("thumbnailUrl", dto.getThumbnailUrl());
         update.set("mentoringCategoryList", dto.getCategoryList());
         update.set("updatedAt", LocalDateTime.now());
-        //log.info("현재시간 : "+ LocalDateTime.now());
 
         mongoTemplate.updateFirst(query, update, Mentoring.class);
     }
@@ -88,7 +87,7 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
     }
 
     @Override
-    public List<MentoringCoreInfoResponseDto> findAllByMentorUuidAndIsDeletedFalse(String userUuid) {
+    public List<MentoringCoreInfoResponseDto> findAllByMentorUuidAndIsDeletedFalse(String userUuid, Boolean isMentor) {
         Aggregation aggregation = Aggregation.newAggregation(
             Aggregation.match(Criteria.where("mentorUuid").is(userUuid)
                     .and("isDeleted").is(false)),
@@ -99,8 +98,8 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
                                 .then(true)
                                 .otherwise(false)
                     ).build(),
-            Aggregation.sort(Sort.by(Sort.Order.desc("prioritySort"))
-                    .and(Sort.by(Sort.Order.desc( "updatedAt")))),
+                Aggregation.sort(isMentor ? Sort.by(Sort.Order.desc("updatedAt"))
+                        : Sort.by(Sort.Order.desc("prioritySort")).and(Sort.by(Sort.Order.desc("updatedAt")))),
             Aggregation.project("mentoringUuid", "name", "description" , "thumbnailUrl", "prioritySort", "nowSessionCount")
                     .and("mentoringUuid").as("mentoringUuid")
                     .and("name").as("name")
@@ -116,7 +115,7 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
     }
 
     @Override
-    public Page<MentoringCoreInfoResponseDto> searchMentoringByMentorUuidPagination(String userUuid, Pageable pageable) {
+    public Page<MentoringCoreInfoResponseDto> searchMentoringByMentorUuidPagination(String userUuid, Boolean isMentor, Pageable pageable) {
         Criteria criteria = Criteria.where("mentorUuid").is(userUuid)
                 .and("isDeleted").is(false);
         Aggregation aggregation = Aggregation.newAggregation(
@@ -127,8 +126,8 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
                                         .then(true)
                                         .otherwise(false)
                         ).build(),
-                Aggregation.sort(Sort.by(Sort.Order.desc("prioritySort"))
-                        .and(Sort.by(Sort.Order.desc( "updatedAt")))),
+                Aggregation.sort(isMentor ? Sort.by(Sort.Order.desc("updatedAt"))
+                        : Sort.by(Sort.Order.desc("prioritySort")).and(Sort.by(Sort.Order.desc("updatedAt")))),
                 Aggregation.project("mentoringUuid", "name", "description", "thumbnailUrl", "prioritySort", "nowSessionCount")
                         .and("mentoringUuid").as("mentoringUuid")
                         .and("name").as("name")

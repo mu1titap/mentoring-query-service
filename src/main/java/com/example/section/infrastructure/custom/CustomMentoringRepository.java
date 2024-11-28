@@ -19,8 +19,8 @@ public interface CustomMentoringRepository {
     List<Mentoring> getReusableMentoringListByMentorUuid(String userUuid);
 
     // mentorUuid로 삭제되지 않은 멘토링 조회
-    List<MentoringCoreInfoResponseDto> findAllByMentorUuidAndIsDeletedFalse(String userUuid);
-    Page<MentoringCoreInfoResponseDto> searchMentoringByMentorUuidPagination(String userUuid, Pageable pageable);
+    List<MentoringCoreInfoResponseDto> findAllByMentorUuidAndIsDeletedFalse(String userUuid, Boolean isMentor);
+    Page<MentoringCoreInfoResponseDto> searchMentoringByMentorUuidPagination(String userUuid, Boolean isMentor, Pageable pageable);
 
     List<Mentoring> findAllByCategoryCodes(String topCategoryCode, String middleCategoryCode, String bottomCategoryCode);
 

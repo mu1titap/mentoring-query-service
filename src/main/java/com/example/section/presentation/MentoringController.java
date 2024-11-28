@@ -66,22 +66,31 @@ public class MentoringController {
         return new BaseResponse<>(mentoringQueryService.getReusableMentoringListByMentorUuid(userUuid));
     }
 
-    @Operation(summary = "멘토 uuid로 멘토링 리스트 조회" , description = "멘토 UUID 로 삭제되지 않은 멘토 멘토링 리스트 조회"
+    @Operation(summary = "멘토 uuid로 멘토링 리스트 조회" ,
+            description = "멘토 UUID 로 삭제되지 않은 멘토 멘토링 리스트 조회. <br/>"+
+                        "멘토면 정렬이 => updateAt 내림차순 정렬. <br/>"+
+                        "멘티면 정렬이 => 멘토링 세션 열려있는 것, updateAt 내림차순 정렬. <br/>"
             ,tags = {"멘토링"} )
     @GetMapping("/mentoring-list")
     public BaseResponse<List<MentoringCoreInfoResponseDto>> searchMentoringListByMentorUuid(
-            @RequestHeader("userUuid") String userUuid)
+            @RequestHeader("userUuid") String userUuid, @RequestParam("isMentor") Boolean isMentor
+            )
     {
-        return new BaseResponse<>(mentoringQueryService.findAllByMentorUuidAndIsDeletedFalse(userUuid));
+        return new BaseResponse<>(mentoringQueryService.findAllByMentorUuidAndIsDeletedFalse(userUuid, isMentor));
     }
-    @Operation(summary = "멘토 uuid로 멘토링 리스트 조회 (페이지네이션)" , description = "멘토 UUID 로 삭제되지 않은 멘토 멘토링 리스트 조회"
+    @Operation(summary = "멘토 uuid로 멘토링 리스트 조회 (페이지네이션)" ,
+            description = "멘토 UUID 로 삭제되지 않은 멘토 멘토링 리스트 조회. <br/>"+
+                            "멘토면 정렬이 => updateAt 내림차순 정렬. <br/>"+
+                            "멘티면 정렬이 => 멘토링 세션 열려있는 것, updateAt 내림차순 정렬. <br/>"
             ,tags = {"멘토링"} )
     @GetMapping("/mentoring-list-pagination")
     public BaseResponse<Page<MentoringCoreInfoResponseDto>> searchMentoringByMentorUuidPagination(
             @RequestHeader("userUuid") String userUuid,
-            @ParameterObject Pageable pageable)
+            @RequestParam("isMentor") Boolean isMentor,
+            @ParameterObject Pageable pageable
+    )
     {
-        return new BaseResponse<>(mentoringQueryService.searchMentoringByMentorUuidPagination(userUuid, pageable));
+        return new BaseResponse<>(mentoringQueryService.searchMentoringByMentorUuidPagination(userUuid, isMentor, pageable));
     }
 
 }

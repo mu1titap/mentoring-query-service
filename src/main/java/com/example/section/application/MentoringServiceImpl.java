@@ -68,13 +68,13 @@ public class MentoringServiceImpl implements MentoringService {
     }
 
     @Override
-    public List<MentoringCoreInfoResponseDto> findAllByMentorUuidAndIsDeletedFalse(String userUuid) {
-        return customMentoringRepository.findAllByMentorUuidAndIsDeletedFalse(userUuid);
+    public List<MentoringCoreInfoResponseDto> findAllByMentorUuidAndIsDeletedFalse(String userUuid, Boolean isMentor) {
+        return customMentoringRepository.findAllByMentorUuidAndIsDeletedFalse(userUuid, isMentor);
     }
 
     @Override
-    public Page<MentoringCoreInfoResponseDto> searchMentoringByMentorUuidPagination(String userUuid, Pageable pageable) {
-        return customMentoringRepository.searchMentoringByMentorUuidPagination(userUuid, pageable);
+    public Page<MentoringCoreInfoResponseDto> searchMentoringByMentorUuidPagination(String userUuid, Boolean isMentor, Pageable pageable) {
+        return customMentoringRepository.searchMentoringByMentorUuidPagination(userUuid, isMentor,  pageable);
     }
 
 
