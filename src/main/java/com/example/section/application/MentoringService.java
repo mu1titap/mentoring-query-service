@@ -26,6 +26,8 @@ public interface MentoringService {
     List<MentoringCoreInfoResponseDto> findAllByMentorUuidAndIsDeletedFalse(String userUuid , Boolean isMentor);
     Page<MentoringCoreInfoResponseDto> searchMentoringByMentorUuidPagination(String userUuid, Boolean isMentor, Pageable pageable);
 
+    Page<MentoringCoreInfoResponseDto> searchByNamePagination(String name, Pageable pageable);
+
     @Transactional
     void createMentoringWithSession(MentoringAddAfterOutDto mentoringAddAfterDto);
     @Transactional

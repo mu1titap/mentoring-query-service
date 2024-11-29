@@ -94,7 +94,7 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
             // prioritySort 필드 추가
             Aggregation.addFields().addField("prioritySort")
                     .withValue(
-                        ConditionalOperators.when(Criteria.where("nowSessionCount").gt(1))
+                        ConditionalOperators.when(Criteria.where("nowSessionCount").gte(1))
                                 .then(true)
                                 .otherwise(false)
                     ).build(),
@@ -122,7 +122,7 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
                 Aggregation.match(criteria),
                 Aggregation.addFields().addField("prioritySort")
                         .withValue(
-                                ConditionalOperators.when(Criteria.where("nowSessionCount").gt(1))
+                                ConditionalOperators.when(Criteria.where("nowSessionCount").gte(1))
                                         .then(true)
                                         .otherwise(false)
                         ).build(),
@@ -188,11 +188,12 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
                 Aggregation.match(categoryCriteria),
                 Aggregation.addFields().addField("prioritySort")
                         .withValue(
-                                ConditionalOperators.when(Criteria.where("nowSessionCount").gt(1))
+                                ConditionalOperators.when(Criteria.where("nowSessionCount").gte(1))
                                         .then(true)
                                         .otherwise(false)
                         ).build(),
-                Aggregation.sort(Sort.by(Sort.Direction.DESC, "updatedAt")),
+                Aggregation.sort(Sort.by(Sort.Order.desc("prioritySort")).and(Sort.by(Sort.Order.desc("updatedAt")))),
+
                 Aggregation.project("mentoringUuid", "name", "description", "thumbnailUrl", "prioritySort", "nowSessionCount")
                         .and("mentoringUuid").as("mentoringUuid")
                         .and("name").as("name")
@@ -210,6 +211,51 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
         // 토탈 카운트
         Aggregation countAggregation = Aggregation.newAggregation(
                 Aggregation.match(categoryCriteria),
+                Aggregation.count().as("total")
+        );
+
+        // Total count 계산
+        long total = Optional.ofNullable(mongoTemplate.aggregate(countAggregation, "mentoring", Document.class)
+                        .getUniqueMappedResult())
+                .map(result -> result.get("total"))
+                .map(totalCount -> totalCount instanceof Number ? ((Number) totalCount).longValue() : 0L)
+                .orElse(0L);
+
+        return PageableExecutionUtils.getPage(content, pageable, () -> total);
+
+    }
+
+    @Override
+    public Page<MentoringCoreInfoResponseDto> searchByNamePagination(String name, Pageable pageable) {
+        Criteria nameCriteria = Criteria.where("name").regex(name, "i")
+                .and("isDeleted").is(false);
+
+        Aggregation aggregation = Aggregation.newAggregation(
+                Aggregation.match(nameCriteria),
+                Aggregation.addFields().addField("prioritySort")
+                        .withValue(
+                                ConditionalOperators.when(Criteria.where("nowSessionCount").gte(1))
+                                        .then(true)
+                                        .otherwise(false)
+                        ).build(),
+                Aggregation.sort(Sort.by(Sort.Order.desc("prioritySort")).and(Sort.by(Sort.Order.desc("updatedAt")))),
+                Aggregation.project("mentoringUuid", "name", "description", "thumbnailUrl", "prioritySort", "nowSessionCount")
+                        .and("mentoringUuid").as("mentoringUuid")
+                        .and("name").as("name")
+                        .and("description").as("description")
+                        .and("thumbnailUrl").as("thumbnailUrl")
+                        .and("prioritySort").as("isAvailable")
+                        .and("nowSessionCount").as("nowSessionCount"),
+                // 페이지네이션 처리
+                Aggregation.skip(pageable.getOffset()),
+                Aggregation.limit(pageable.getPageSize())
+        );
+        List<MentoringCoreInfoResponseDto> content = mongoTemplate.aggregate(aggregation, "mentoring", MentoringCoreInfoResponseDto.class)
+                .getMappedResults();
+
+        // 토탈 카운트
+        Aggregation countAggregation = Aggregation.newAggregation(
+                Aggregation.match(nameCriteria),
                 Aggregation.count().as("total")
         );
 
