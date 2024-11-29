@@ -92,5 +92,17 @@ public class MentoringController {
     {
         return new BaseResponse<>(mentoringQueryService.searchMentoringByMentorUuidPagination(userUuid, isMentor, pageable));
     }
+    @Operation(summary = "멘토링 이름으로 멘토링 조회 (페이지네이션)" ,
+            description = "V1으로 Elastic Search 아님 <br/>"+
+                    "멘토링 세션 열려있는 것 우선정렬, updateAt 내림차순 정렬. <br/>"
+            ,tags = {"멘토링"} )
+    @GetMapping("/mentoring-list-pagination/{name}")
+    public BaseResponse<Page<MentoringCoreInfoResponseDto>> searchByNamePagination(
+            @PathVariable("name") String name,
+            @ParameterObject Pageable pageable
+    )
+    {
+        return new BaseResponse<>(mentoringQueryService.searchByNamePagination(name, pageable));
+    }
 
 }

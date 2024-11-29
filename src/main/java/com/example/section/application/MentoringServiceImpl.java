@@ -77,6 +77,11 @@ public class MentoringServiceImpl implements MentoringService {
         return customMentoringRepository.searchMentoringByMentorUuidPagination(userUuid, isMentor,  pageable);
     }
 
+    @Override
+    public Page<MentoringCoreInfoResponseDto> searchByNamePagination(String name, Pageable pageable) {
+        return customMentoringRepository.searchByNamePagination(name, pageable);
+    }
+
 
     @Override
     public void updateMentoring(MentoringEditRequestOutDto mentoringEditRequestOutDto) {

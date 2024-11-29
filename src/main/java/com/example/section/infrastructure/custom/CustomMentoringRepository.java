@@ -26,5 +26,7 @@ public interface CustomMentoringRepository {
 
     Page<MentoringCoreInfoResponseDto> searchByCategoryCodesPagination(String topCategoryCode, String middleCategoryCode, String bottomCategoryCode, Pageable pageable);
 
+    Page<MentoringCoreInfoResponseDto> searchByNamePagination(String name, Pageable pageable);
+
 
 }
