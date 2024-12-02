@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@ToString(exclude = "mentoringSessionAddAfterOutDtoList")
+@ToString(exclude = {"mentoringSessionAddAfterOutDtoList", "mentoringCategoryAfterOutDtoList", "mentoringHashTagAfterOutDto"})
 //@ToString
 public class MentoringAddAfterOutDto {
     private String mentoringId;
@@ -38,6 +38,8 @@ public class MentoringAddAfterOutDto {
 
     private List<MentoringCategoryAfterOutDto> mentoringCategoryAfterOutDtoList;
 
+    private MentoringHashTagAfterOutDto mentoringHashTagAfterOutDto;
+
     public Mentoring toMongoMentoringEntity(Integer sessionCount) {
         return Mentoring.builder()
                 .mentoringId(this.getMentoringId())
@@ -51,9 +53,11 @@ public class MentoringAddAfterOutDto {
                 .isDeleted(this.getIsDeleted())
                 .createdAt(this.getCreatedAt())
                 .updatedAt(this.getUpdatedAt())
+                .nowSessionCount(sessionCount)
                 .mentoringCategoryList(this.getMentoringCategoryAfterOutDtoList()!=null?
                         this.getMentoringCategoryAfterOutDtoList() : null)
-                .nowSessionCount(sessionCount)
+                .mentoringHashTagList(this.getMentoringHashTagAfterOutDto()!=null?
+                        this.getMentoringHashTagAfterOutDto().getAfterHashtagList() : null)
                 .build();
     }
     public List<MentoringSession> toMongoSessionEntities() {

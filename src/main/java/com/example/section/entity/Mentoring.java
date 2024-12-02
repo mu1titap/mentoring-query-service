@@ -1,6 +1,8 @@
 package com.example.section.entity;
 
+import com.example.section.messagequeue.messageIn.AfterHashtag;
 import com.example.section.messagequeue.messageIn.MentoringCategoryAfterOutDto;
+import com.example.section.messagequeue.messageIn.MentoringHashTagAfterOutDto;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -39,5 +41,6 @@ public class Mentoring {
 
     private Integer nowSessionCount;
     private List<MentoringCategoryAfterOutDto> mentoringCategoryList;
+    private List<AfterHashtag> mentoringHashTagList;
 
 }

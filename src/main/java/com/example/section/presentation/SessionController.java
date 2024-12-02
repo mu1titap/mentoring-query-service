@@ -9,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Log4j2
 @RestController
@@ -17,19 +19,33 @@ import java.util.List;
 @RequestMapping("/api/v1/mentoring-query-service")
 public class SessionController {
     private final SessionService sessionService;
-    @Operation(summary = "멘토링 세션 리스트 조회 (멘토링uuid, 유저uuid)"
-            ,description = "조회 조건은 예약마감일 마감 전 까지.<br/>" +
-            "유저 uuid는 필수 아님.<br/>" +
-            "로그인 시 유저 uuid를 넘겨주면 해당 유저의 세션 참여 여부를 체크."
-            ,tags = {"멘토링 세션"})
-    @GetMapping("/session-list")
-    public BaseResponse<List<MentoringSessionResponseDto>> getMentoringSessions(
-            @RequestParam("mentoringUuid") String mentoringUuid ,
-            @RequestHeader(value = "userUuid", required = false) String userUuid
-    )
-    {
-        return new BaseResponse<>(sessionService.findByMentoringUuidAndDeadlineDate(mentoringUuid,userUuid));
-    }
+//    @Operation(summary = "멘토링 세션 리스트 조회 (멘토링uuid, 유저uuid)"
+//            ,description = "조회 조건은 예약마감일 마감 전 까지.<br/>" +
+//            "유저 uuid는 필수 아님.<br/>" +
+//            "로그인 시 유저 uuid를 넘겨주면 해당 유저의 세션 참여 여부를 체크."
+//            ,tags = {"멘토링 세션"})
+//    @GetMapping("/session-list")
+//    public BaseResponse<List<MentoringSessionResponseDto>> getMentoringSessions(
+//            @RequestParam("mentoringUuid") String mentoringUuid ,
+//            @RequestHeader(value = "userUuid", required = false) String userUuid
+//    )
+//    {
+//        return new BaseResponse<>(sessionService.findByMentoringUuidAndDeadlineDate(mentoringUuid,userUuid));
+//    }
+@Operation(summary = "멘토링 세션 리스트 조회 (멘토링uuid, 유저uuid)"
+        ,description = "조회 조건은 예약마감일 마감 전 까지.<br/>" +
+        "유저 uuid는 필수 아님.<br/>" +
+        "로그인 시 유저 uuid를 넘겨주면 해당 유저의 세션 참여 여부를 체크."
+        ,tags = {"멘토링 세션"})
+@GetMapping("/session-list")
+public BaseResponse<Map<LocalDate, List<MentoringSessionResponseDto>>> getMentoringSessions(
+        @RequestParam("mentoringUuid") String mentoringUuid ,
+        @RequestHeader(value = "userUuid", required = false) String userUuid
+)
+{
+    return new BaseResponse<>(sessionService.findByMentoringUuidAndDeadlineDateV2(mentoringUuid,userUuid));
+}
+
 
     @Operation(summary = "세션 uuid로 멘토링 세션 단 건 조회" , description = "세션 UUID 로 멘토링 세션 조회" ,tags = {"멘토링 세션"})
     @GetMapping("/session/{sessionUuid}")

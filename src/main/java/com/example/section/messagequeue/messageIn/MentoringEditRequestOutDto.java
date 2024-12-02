@@ -8,7 +8,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = "categoryList")
+@ToString(exclude = {"categoryList","hashTag"})
 public class MentoringEditRequestOutDto{
 
     private String id;
@@ -23,5 +23,7 @@ public class MentoringEditRequestOutDto{
 
     @Setter
     private List<MentoringCategoryAfterOutDto> categoryList;
+    @Setter
+    private MentoringHashTagAfterOutDto hashTag;
 
 }
