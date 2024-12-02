@@ -5,7 +5,9 @@ import com.example.section.dto.out.SessionRoomResponseDto;
 import com.example.section.messagequeue.messageIn.*;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Transactional(readOnly = true)
 public interface SessionService {
@@ -13,6 +15,8 @@ public interface SessionService {
     MentoringSessionResponseDto findBySessionUuid(String sessionUuid);
 
     List<MentoringSessionResponseDto> findByMentoringUuidAndDeadlineDate(String mentoringUuid, String userUuid);
+
+    Map<LocalDate, List<MentoringSessionResponseDto>> findByMentoringUuidAndDeadlineDateV2(String mentoringUuid, String userUuid);
 
     SessionRoomResponseDto findSessionRoomBySessionUuid(String sessionUuid);
 

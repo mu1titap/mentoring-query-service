@@ -38,8 +38,8 @@ public class MentoringSessionResponseDto {
 
     private Boolean isClosed;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+//    private LocalDateTime createdAt;
+//    private LocalDateTime updatedAt;
 
     public static MentoringSessionResponseDto from(MentoringSession mentoringSession){
         return MentoringSessionResponseDto.builder()
@@ -55,8 +55,8 @@ public class MentoringSessionResponseDto {
                 .nowHeadCount(mentoringSession.getNowHeadCount())
                 .price(mentoringSession.getPrice())
                 .isClosed(mentoringSession.getIsClosed())
-                .createdAt(mentoringSession.getCreatedAt())
-                .updatedAt(mentoringSession.getUpdatedAt())
+//                .createdAt(mentoringSession.getCreatedAt())
+//                .updatedAt(mentoringSession.getUpdatedAt())
                 .build();
     }
     public static List<MentoringSessionResponseDto> from(List<MentoringSession> mentoringSessions){
@@ -76,8 +76,8 @@ public class MentoringSessionResponseDto {
                                                 .nowHeadCount(mentoringSession.getNowHeadCount())
                                                 .price(mentoringSession.getPrice())
                                                 .isClosed(mentoringSession.getIsClosed())
-                                                .createdAt(mentoringSession.getCreatedAt())
-                                                .updatedAt(mentoringSession.getUpdatedAt())
+                                                //.createdAt(mentoringSession.getCreatedAt())
+                                                //.updatedAt(mentoringSession.getUpdatedAt())
                                                 .build()
                 )
                 .toList();

@@ -42,10 +42,15 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
         update.set("detail", dto.getDetail());
         update.set("isReusable", dto.getIsReusable());
         update.set("thumbnailUrl", dto.getThumbnailUrl());
-        update.set("mentoringCategoryList", dto.getCategoryList());
+        if(dto.getCategoryList() != null)
+            update.set("mentoringCategoryList", dto.getCategoryList()); // 카테고리 업데이트
+        if(dto.getHashTag()!=null)
+            update.set("mentoringHashTagList", dto.getHashTag().getAfterHashtagList()); // 해시태그 업데이트
         update.set("updatedAt", LocalDateTime.now());
 
         mongoTemplate.updateFirst(query, update, Mentoring.class);
+
+        log.info("멘토링 업데이트 완료");
     }
 
     @Override

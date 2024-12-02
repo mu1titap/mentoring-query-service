@@ -11,9 +11,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Log4j2
@@ -53,6 +53,19 @@ public class SessionServiceImpl implements  SessionService {
             else result.add(setUserParticipatingInfo(session, isParticipating));
         }
         return result;
+
+    }
+
+    @Override
+    public Map<LocalDate, List<MentoringSessionResponseDto>> findByMentoringUuidAndDeadlineDateV2(String mentoringUuid, String userUuid) {
+        List<MentoringSessionResponseDto> sessionList = customSessionRepository.findAllByMentoringUuidAndDeadlineDateV2(mentoringUuid,userUuid);
+        // startDate 별로 Map 으로 묶어서 반환
+        return sessionList.stream()
+                .collect(Collectors.groupingBy(
+                        MentoringSessionResponseDto::getStartDate,
+                        LinkedHashMap::new,
+                        Collectors.toList()
+                ));
 
     }
 
@@ -114,8 +127,8 @@ public class SessionServiceImpl implements  SessionService {
                 .isParticipating(isParticipating)
                 .price(session.getPrice())
                 .isClosed(session.getIsClosed())
-                .createdAt(session.getCreatedAt())
-                .updatedAt(session.getUpdatedAt())
+                //.createdAt(session.getCreatedAt())
+                //.updatedAt(session.getUpdatedAt())
                 .build();
     }
 

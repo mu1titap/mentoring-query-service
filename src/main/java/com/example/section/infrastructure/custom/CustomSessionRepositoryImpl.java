@@ -1,5 +1,7 @@
 package com.example.section.infrastructure.custom;
 
+import com.example.section.dto.out.MentoringCoreInfoResponseDto;
+import com.example.section.dto.out.MentoringSessionResponseDto;
 import com.example.section.messagequeue.messageIn.AfterSessionUserOutDto;
 import com.example.section.messagequeue.messageIn.CancelSessionUserMessage;
 import com.example.section.messagequeue.messageIn.ReRegisterSessionUserMessage;
@@ -10,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.ConditionalOperators;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -79,6 +83,48 @@ public class CustomSessionRepositoryImpl implements CustomSessionRepository {
         query.with(Sort.by(Sort.Order.asc("startDate"))
         .and(Sort.by(Sort.Order.asc( "startTime"))));
         return mongoTemplate.find(query, MentoringSession.class);
+    }
+
+    @Override
+    public List<MentoringSessionResponseDto> findAllByMentoringUuidAndDeadlineDateV2(String mentoringUuid, String userUuid) {
+        Aggregation aggregation = Aggregation.newAggregation(
+                Aggregation.match(Criteria.where("mentoringUuid").is(mentoringUuid)
+                        .and("isDeleted").is(false)
+                       .and("deadlineDate").gte(LocalDate.now())),
+
+
+            // prioritySort 필드 추가
+                Aggregation.addFields().addField("isParticipating")
+                    .withValue(
+                            ConditionalOperators.when(Criteria.where("sessionUsers.userUuid").is(mentoringUuid))
+                                    .then(true)
+                                    .otherwise(false)
+                    ).build(),
+
+                Aggregation.sort(Sort.by(Sort.Order.asc("startDate"))
+                            .and(Sort.by(Sort.Order.asc("startTime")))),
+
+                Aggregation.project("sessionUuid", "mentoringUuid", "startDate" , "endDate", "startTime", "endTime",
+                                "deadlineDate", "minHeadCount", "maxHeadCount", "nowHeadCount", "isParticipating","price", "isClosed" )
+                    .and("sessionUuid").as("sessionUuid")
+                    .and("mentoringUuid").as("mentoringUuid")
+                    .and("startDate").as("startDate")
+                    .and("endDate").as("endDate")
+                    .and("startTime").as("startTime")
+                    .and("endTime").as("endTime")
+
+                        .and("deadlineDate").as("deadlineDate")
+                        .and("minHeadCount").as("minHeadCount")
+                        .and("maxHeadCount").as("maxHeadCount")
+                        .and("nowHeadCount").as("nowHeadCount")
+                        .and("isParticipating").as("isParticipating")
+                        .and("price").as("price")
+                        .and("isClosed").as("isClosed")
+            );
+
+        return mongoTemplate.aggregate(aggregation, "mentoring_session", MentoringSessionResponseDto.class)
+                .getMappedResults();
+
     }
 
     @Override
