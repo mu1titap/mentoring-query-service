@@ -15,4 +15,8 @@ public class SessionConfirmedMessage {
     private String sessionUuid;
     private Boolean sessionIsConfirmed;
     private LocalDate startDate;
+
+    private Integer minHeadCount;
+    private Integer maxHeadCount;
+    private Integer nowHeadCount;
 }

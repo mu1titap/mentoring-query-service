@@ -1,6 +1,7 @@
 package com.example.section.application;
 
 import com.example.section.dto.out.MentoringSessionResponseDto;
+import com.example.section.dto.out.SessionListResponseDto;
 import com.example.section.dto.out.SessionRoomResponseDto;
 import com.example.section.entity.MentoringSession;
 import com.example.section.entity.vo.SessionUser;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,16 +59,29 @@ public class SessionServiceImpl implements  SessionService {
     }
 
     @Override
-    public Map<LocalDate, List<MentoringSessionResponseDto>> findByMentoringUuidAndDeadlineDateV2(String mentoringUuid, String userUuid) {
+    public List<SessionListResponseDto> findByMentoringUuidAndDeadlineDateV2(String mentoringUuid, String userUuid) {
         List<MentoringSessionResponseDto> sessionList = customSessionRepository.findAllByMentoringUuidAndDeadlineDateV2(mentoringUuid,userUuid);
+        //SessionListResponseDto result = new SessionListResponseDto();
+        //result.setMentoringSessionResponseDtoList(sessionList);
         // startDate 별로 Map 으로 묶어서 반환
-        return sessionList.stream()
-                .collect(Collectors.groupingBy(
-                        MentoringSessionResponseDto::getStartDate,
-                        LinkedHashMap::new,
-                        Collectors.toList()
-                ));
+        Map<LocalDate, List<MentoringSessionResponseDto>> sessionsByDate = sessionList.stream()
+                .collect(Collectors.groupingBy(MentoringSessionResponseDto::getStartDate));
 
+        return sessionsByDate.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .map(entry -> SessionListResponseDto.builder()
+                        .totalCount(entry.getValue().size())
+                        .startDate(entry.getKey())
+                        .mentoringSessionResponseDtoList(entry.getValue())
+                        .build())
+                .collect(Collectors.toList());
+
+
+
+
+    }
+
+    private void collect(Collector<Object,?, List<Object>> list) {
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.example.section.messagequeue.messageIn.ReRegisterSessionUserMessage;
 import com.example.section.entity.MentoringSession;
 import com.example.section.entity.vo.SessionUser;
 import com.example.section.messagequeue.messageIn.SessionConfirmedMessage;
+import com.mongodb.BasicDBObject;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Sort;
@@ -65,7 +66,7 @@ public class CustomSessionRepositoryImpl implements CustomSessionRepository {
         // 현재인원수, 세션 닫힘 상태, 세션유저리스트(only userUuid) 업데이트
         Update update = new Update();
         update.inc("nowHeadCount",1);
-        update.push("sessionUsers", SessionUser.builder().userUuid(dto.getMenteeUuid().trim()).build());
+        update.push("sessionUsers", dto.toSessionUser());
         update.set("updatedAt", LocalDate.now());
         if (dto.getShouldCloseSession()) {
             update.set("isClosed",true);
@@ -87,41 +88,37 @@ public class CustomSessionRepositoryImpl implements CustomSessionRepository {
 
     @Override
     public List<MentoringSessionResponseDto> findAllByMentoringUuidAndDeadlineDateV2(String mentoringUuid, String userUuid) {
+
         Aggregation aggregation = Aggregation.newAggregation(
                 Aggregation.match(Criteria.where("mentoringUuid").is(mentoringUuid)
                         .and("isDeleted").is(false)
-                       .and("deadlineDate").gte(LocalDate.now())),
-
-
-            // prioritySort 필드 추가
+                        .and("deadlineDate").gte(LocalDate.now())),
+                // 참여 여부 필드 추가
                 Aggregation.addFields().addField("isParticipating")
-                    .withValue(
-                            ConditionalOperators.when(Criteria.where("sessionUsers.userUuid").is(mentoringUuid))
-                                    .then(true)
-                                    .otherwise(false)
-                    ).build(),
+                        .withValue(
+                                ConditionalOperators.when(Criteria.where("sessionUsers.userUuid").is(userUuid))
+                                        .then(true)
+                                        .otherwise(false)
+                        ).build(),
 
+                // sessionUsers 배열을 펼침
+                Aggregation.unwind("sessionUsers", true),
+                // sessionUsers를 배열로 다시 그룹화
+                Aggregation.group("sessionUuid", "mentoringUuid", "startDate", "endDate", "startTime", "endTime",
+                                "deadlineDate", "minHeadCount", "maxHeadCount", "nowHeadCount", "isParticipating", "price", "isClosed")
+                        .push(new BasicDBObject()
+                                .append("menteeImageUrl", "$sessionUsers.menteeImageUrl")
+                                .append("userUuid", "$sessionUsers.userUuid"))
+                        .as("sessionUserList"),
+                // 정렬
                 Aggregation.sort(Sort.by(Sort.Order.asc("startDate"))
-                            .and(Sort.by(Sort.Order.asc("startTime")))),
+                        .and(Sort.by(Sort.Order.asc("startTime")))),
 
-                Aggregation.project("sessionUuid", "mentoringUuid", "startDate" , "endDate", "startTime", "endTime",
-                                "deadlineDate", "minHeadCount", "maxHeadCount", "nowHeadCount", "isParticipating","price", "isClosed" )
-                    .and("sessionUuid").as("sessionUuid")
-                    .and("mentoringUuid").as("mentoringUuid")
-                    .and("startDate").as("startDate")
-                    .and("endDate").as("endDate")
-                    .and("startTime").as("startTime")
-                    .and("endTime").as("endTime")
-
-                        .and("deadlineDate").as("deadlineDate")
-                        .and("minHeadCount").as("minHeadCount")
-                        .and("maxHeadCount").as("maxHeadCount")
-                        .and("nowHeadCount").as("nowHeadCount")
-                        .and("isParticipating").as("isParticipating")
-                        .and("price").as("price")
-                        .and("isClosed").as("isClosed")
-            );
-
+                // 필요한 필드만 반환
+                Aggregation.project("sessionUuid", "mentoringUuid", "startDate", "endDate", "startTime", "endTime",
+                        "deadlineDate", "minHeadCount", "maxHeadCount", "nowHeadCount", "isParticipating", "price",
+                        "isClosed", "sessionUserList")
+        );
         return mongoTemplate.aggregate(aggregation, "mentoring_session", MentoringSessionResponseDto.class)
                 .getMappedResults();
 

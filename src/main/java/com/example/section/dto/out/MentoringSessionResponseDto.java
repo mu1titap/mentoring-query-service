@@ -1,6 +1,7 @@
 package com.example.section.dto.out;
 
 import com.example.section.entity.MentoringSession;
+import com.example.section.entity.vo.SessionUser;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -38,8 +39,8 @@ public class MentoringSessionResponseDto {
 
     private Boolean isClosed;
 
-//    private LocalDateTime createdAt;
-//    private LocalDateTime updatedAt;
+    private List<SessionUser> sessionUserList;
+
 
     public static MentoringSessionResponseDto from(MentoringSession mentoringSession){
         return MentoringSessionResponseDto.builder()

@@ -14,6 +14,8 @@ public class AfterSessionUserOutDto {
     private String id; // 세션유저 Id
     private String sessionUuid;
     private String menteeUuid;
+    private String menteeImageUrl;
+
     private Status status;
 
     private String mentoringName;
@@ -25,6 +27,7 @@ public class AfterSessionUserOutDto {
     public SessionUser toSessionUserValueObject() {
         return SessionUser.builder()
                 .userUuid(this.menteeUuid)
+                .menteeImageUrl(this.menteeImageUrl)
                 .build();
     }
 
