@@ -3,6 +3,7 @@ package com.example.section.presentation;
 import com.example.section.application.SessionService;
 import com.example.section.common.entity.BaseResponse;
 import com.example.section.dto.out.MentoringSessionResponseDto;
+import com.example.section.dto.out.SessionListResponseDto;
 import com.example.section.dto.out.SessionRoomResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +39,7 @@ public class SessionController {
         "로그인 시 유저 uuid를 넘겨주면 해당 유저의 세션 참여 여부를 체크."
         ,tags = {"멘토링 세션"})
 @GetMapping("/session-list")
-public BaseResponse<Map<LocalDate, List<MentoringSessionResponseDto>>> getMentoringSessions(
+public BaseResponse<List<SessionListResponseDto>> getMentoringSessions(
         @RequestParam("mentoringUuid") String mentoringUuid ,
         @RequestHeader(value = "userUuid", required = false) String userUuid
 )

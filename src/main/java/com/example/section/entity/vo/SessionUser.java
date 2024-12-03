@@ -9,4 +9,5 @@ import lombok.*;
 @ToString
 public class SessionUser {
     private String userUuid;
+    private String menteeImageUrl;
 }

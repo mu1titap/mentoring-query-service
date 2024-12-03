@@ -1,6 +1,7 @@
 package com.example.section.application;
 
 import com.example.section.dto.out.MentoringSessionResponseDto;
+import com.example.section.dto.out.SessionListResponseDto;
 import com.example.section.dto.out.SessionRoomResponseDto;
 import com.example.section.messagequeue.messageIn.*;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +17,7 @@ public interface SessionService {
 
     List<MentoringSessionResponseDto> findByMentoringUuidAndDeadlineDate(String mentoringUuid, String userUuid);
 
-    Map<LocalDate, List<MentoringSessionResponseDto>> findByMentoringUuidAndDeadlineDateV2(String mentoringUuid, String userUuid);
+    List<SessionListResponseDto> findByMentoringUuidAndDeadlineDateV2(String mentoringUuid, String userUuid);
 
     SessionRoomResponseDto findSessionRoomBySessionUuid(String sessionUuid);
 
