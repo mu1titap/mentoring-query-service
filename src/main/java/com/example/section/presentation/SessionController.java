@@ -56,18 +56,19 @@ public BaseResponse<List<SessionListResponseDto>> getMentoringSessions(
 
 
     /**
-     *
      * feing client 용
      */
     @Operation(summary = "세션 uuid로 채팅룸 정보(시간,멘토링 정보) 조회", tags = {"멘토링 세션 feign client 용"})
     @GetMapping("/session-room/{sessionUuid}")
     public SessionRoomResponseDto findSessionRoomBySessionUuid(@PathVariable("sessionUuid") String sessionUuid) {
+        log.info("/session-room/{sessionUuid} 실행됨");
         return sessionService.findSessionRoomBySessionUuid(sessionUuid);
     }
 
     @Operation(summary = "세션 uuid 로 멘토 uuid 조회", tags = {"멘토링 세션 feign client 용"})
     @GetMapping("/mentor-info/{sessionUuid}")
     public String getMentorUuidBySessionUuid(@PathVariable("sessionUuid") String sessionUuid) {
+        log.info("/mentor-info/{sessionUuid} 실행됨");
         return sessionService.getMentorUuidBySessionUuid(sessionUuid);
     }
 }
