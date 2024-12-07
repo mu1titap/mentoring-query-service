@@ -20,6 +20,8 @@ public class MentoringSessionResponseDto {
 
     private String mentoringUuid;
 
+    // todo : 멘토 uuid 추가
+
     private LocalDate startDate;
 
     private LocalDate endDate;

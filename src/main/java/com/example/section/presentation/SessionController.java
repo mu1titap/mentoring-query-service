@@ -47,7 +47,6 @@ public BaseResponse<List<SessionListResponseDto>> getMentoringSessions(
     return new BaseResponse<>(sessionService.findByMentoringUuidAndDeadlineDateV2(mentoringUuid,userUuid));
 }
 
-
     @Operation(summary = "세션 uuid로 멘토링 세션 단 건 조회" , description = "세션 UUID 로 멘토링 세션 조회" ,tags = {"멘토링 세션"})
     @GetMapping("/session/{sessionUuid}")
     public BaseResponse<MentoringSessionResponseDto> getMentoringSession(@PathVariable("sessionUuid") String sessionUuid) {
