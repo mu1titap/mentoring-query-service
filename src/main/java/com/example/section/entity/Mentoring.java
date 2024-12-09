@@ -34,8 +34,12 @@ public class Mentoring {
 
     private Boolean isReusable;
 
-    private Long reviewCount;
-    private Double averageStar;
+    // 집계 관련 start
+    private Long totalReviewCount;
+    private Double reviewStarAvg;
+    private Long totalSaleCount;
+    private Double totalScore;
+    // 집계 관련 end
 
     private Boolean isDeleted;
 

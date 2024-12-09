@@ -165,19 +165,19 @@ public class KafkaConsumerConfig {
      * 멘토링 별 리뷰 집계
      */
     @Bean
-    public ConsumerFactory<String, ReviewStarDto> reviewAggregationConsumerFactory(){
+    public ConsumerFactory<String, MentoringOverviewDto> mentoringAggregationConsumerFactory(){
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaClusterUri);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "kafka-mentoring-query-service");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
-        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), new JsonDeserializer<>(ReviewStarDto.class, false));
+        return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), new JsonDeserializer<>(MentoringOverviewDto.class, false));
     }
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, ReviewStarDto> reviewAggregationListener() {
-        ConcurrentKafkaListenerContainerFactory<String, ReviewStarDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(reviewAggregationConsumerFactory());
+    public ConcurrentKafkaListenerContainerFactory<String, MentoringOverviewDto> mentoringAggregationListener() {
+        ConcurrentKafkaListenerContainerFactory<String, MentoringOverviewDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(mentoringAggregationConsumerFactory());
         return factory;
     }
 

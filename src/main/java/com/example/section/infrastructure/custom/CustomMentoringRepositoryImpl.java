@@ -4,7 +4,7 @@ import com.example.section.dto.out.MentoringCoreInfoResponseDto;
 import com.example.section.dto.out.MentoringResponseDto;
 import com.example.section.messagequeue.messageIn.MentoringEditRequestOutDto;
 import com.example.section.entity.Mentoring;
-import com.example.section.messagequeue.messageIn.ReviewStarDto;
+import com.example.section.messagequeue.messageIn.MentoringOverviewDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.bson.Document;
@@ -23,6 +23,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -82,12 +83,15 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
     }
 
     @Override
-    public void updateReviewStar(ReviewStarDto dto) {
+    public void updateMentoringOverview(MentoringOverviewDto dto) {
         Query query = new Query();
         query.addCriteria(Criteria.where("mentoringUuid").is(dto.getMentoringUuid()));
         Update update = new Update();
-        update.set("reviewCount", dto.getReviewCount());
-        update.set("averageStar", dto.getAverageStar());
+        update.set("totalReviewCount", dto.getTotalReviewCount());
+        update.set("reviewStarAvg", dto.getReviewStarAvg());
+        update.set("totalSaleCount", dto.getTotalSaleCount());
+        update.set("totalScore", dto.getTotalScore());
+
         mongoTemplate.updateFirst(query, update, Mentoring.class);
     }
 
@@ -116,7 +120,8 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
                     ).build(),
                 Aggregation.sort(isMentor ? Sort.by(Sort.Order.desc("updatedAt"))
                         : Sort.by(Sort.Order.desc("prioritySort")).and(Sort.by(Sort.Order.desc("updatedAt")))),
-            Aggregation.project("mentoringUuid", "name", "description" , "thumbnailUrl", "prioritySort", "nowSessionCount")
+            Aggregation.project("mentoringUuid", "name", "description" , "thumbnailUrl", "prioritySort", "nowSessionCount",
+                            "reviewCount", "averageStar", "totalSaleCount")
                     .and("mentoringUuid").as("mentoringUuid")
                     .and("name").as("name")
                     .and("description").as("description")
@@ -125,6 +130,7 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
                     .and("nowSessionCount").as("nowSessionCount")
                     .and("reviewCount").as("reviewCount")
                     .and("averageStar").as("averageStar")
+                    .and("totalSaleCount").as("totalSaleCount")
         );
 
         return mongoTemplate.aggregate(aggregation, "mentoring", MentoringCoreInfoResponseDto.class)
@@ -146,7 +152,8 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
                         ).build(),
                 Aggregation.sort(isMentor ? Sort.by(Sort.Order.desc("updatedAt"))
                         : Sort.by(Sort.Order.desc("prioritySort")).and(Sort.by(Sort.Order.desc("updatedAt")))),
-                Aggregation.project("mentoringUuid", "name", "description", "thumbnailUrl", "prioritySort", "nowSessionCount")
+                Aggregation.project("mentoringUuid", "name", "description", "thumbnailUrl", "prioritySort", "nowSessionCount",
+                                "reviewCount", "averageStar", "totalSaleCount")
                         .and("mentoringUuid").as("mentoringUuid")
                         .and("name").as("name")
                         .and("description").as("description")
@@ -154,7 +161,8 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
                         .and("prioritySort").as("isAvailable")
                         .and("nowSessionCount").as("nowSessionCount")
                         .and("reviewCount").as("reviewCount")
-                        .and("averageStar").as("averageStar"),
+                        .and("averageStar").as("averageStar")
+                        .and("totalSaleCount").as("totalSaleCount"),
                 // 페이지네이션 처리
                 Aggregation.skip(pageable.getOffset()),
                 Aggregation.limit(pageable.getPageSize())
@@ -214,7 +222,8 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
                         ).build(),
                 Aggregation.sort(Sort.by(Sort.Order.desc("prioritySort")).and(Sort.by(Sort.Order.desc("updatedAt")))),
 
-                Aggregation.project("mentoringUuid", "name", "description", "thumbnailUrl", "prioritySort", "nowSessionCount")
+                Aggregation.project("mentoringUuid", "name", "description", "thumbnailUrl", "prioritySort", "nowSessionCount",
+                                "reviewCount", "averageStar", "totalSaleCount")
                         .and("mentoringUuid").as("mentoringUuid")
                         .and("name").as("name")
                         .and("description").as("description")
@@ -222,7 +231,9 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
                         .and("prioritySort").as("isAvailable")
                         .and("nowSessionCount").as("nowSessionCount")
                         .and("reviewCount").as("reviewCount")
-                        .and("averageStar").as("averageStar"),
+                        .and("averageStar").as("averageStar")
+                        .and("totalSaleCount").as("totalSaleCount")
+                ,
                 // 페이지네이션 처리
                 Aggregation.skip(pageable.getOffset()),
                 Aggregation.limit(pageable.getPageSize())
@@ -261,7 +272,8 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
                                         .otherwise(false)
                         ).build(),
                 Aggregation.sort(Sort.by(Sort.Order.desc("prioritySort")).and(Sort.by(Sort.Order.desc("updatedAt")))),
-                Aggregation.project("mentoringUuid", "name", "description", "thumbnailUrl", "prioritySort", "nowSessionCount")
+                Aggregation.project("mentoringUuid", "name", "description", "thumbnailUrl", "prioritySort", "nowSessionCount",
+                                "totalReviewCount", "reviewStarAvg", "totalSaleCount")
                         .and("mentoringUuid").as("mentoringUuid")
                         .and("name").as("name")
                         .and("description").as("description")
@@ -269,7 +281,9 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
                         .and("prioritySort").as("isAvailable")
                         .and("nowSessionCount").as("nowSessionCount")
                         .and("reviewCount").as("reviewCount")
-                        .and("averageStar").as("averageStar"),
+                        .and("averageStar").as("averageStar")
+                        .and("totalSaleCount").as("totalSaleCount")
+                ,
                 // 페이지네이션 처리
                 Aggregation.skip(pageable.getOffset()),
                 Aggregation.limit(pageable.getPageSize())
@@ -291,6 +305,56 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
                 .orElse(0L);
 
         return PageableExecutionUtils.getPage(content, pageable, () -> total);
+
+    }
+
+    @Override
+    public List<MentoringCoreInfoResponseDto> findPopularMentoringList(List<String> topCategoryCodeList) {
+
+        Criteria criteria = Criteria.where("isDeleted").is(false);
+        List<AggregationOperation> aggregationOperations = new ArrayList<>();
+
+        // 카테고리 조건이 있을 경우 추가
+        if (topCategoryCodeList != null && !topCategoryCodeList.isEmpty()) {
+            aggregationOperations.add(Aggregation.unwind("mentoringCategoryList"));
+            criteria = criteria.and("mentoringCategoryList.topCategoryCode").in(topCategoryCodeList);
+        }
+        aggregationOperations.add(Aggregation.match(criteria));
+        // 세션 존재 여부 컬럼 추가
+        aggregationOperations.add(
+                Aggregation.addFields().addField("prioritySort")
+                        .withValue(
+                                ConditionalOperators.when(Criteria.where("nowSessionCount").gte(1))
+                                        .then(true)
+                                        .otherwise(false)
+                        ).build()
+        );
+        Sort sort = Sort.by(
+                Sort.Order.desc("prioritySort"), // 세션 존재 여부
+                Sort.Order.desc("totalScore"), //  점수 내림차순
+                Sort.Order.desc("updatedAt") // 업데이트 시간 내림차순
+        );
+        aggregationOperations.add(Aggregation.sort(sort));
+        // 필요한 필드만 선택
+        aggregationOperations.add(
+                Aggregation.project("mentoringUuid", "name", "description", "thumbnailUrl", "prioritySort",
+                                "nowSessionCount", "totalReviewCount", "reviewStarAvg", "totalSaleCount")
+                        .and("mentoringUuid").as("mentoringUuid")
+                        .and("name").as("name")
+                        .and("description").as("description")
+                        .and("thumbnailUrl").as("thumbnailUrl")
+                        .and("prioritySort").as("isAvailable")
+                        .and("nowSessionCount").as("nowSessionCount")
+                        .and("totalReviewCount").as("reviewCount")
+                        .and("reviewStarAvg").as("averageStar")
+                        .and("totalSaleCount").as("totalSaleCount")
+        );
+        aggregationOperations.add(Aggregation.limit(100));
+        Aggregation aggregation = Aggregation.newAggregation(aggregationOperations);
+
+        return mongoTemplate.aggregate(aggregation, "mentoring", MentoringCoreInfoResponseDto.class)
+                .getMappedResults();
+
 
     }
 

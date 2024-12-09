@@ -4,7 +4,7 @@ import com.example.section.dto.out.MentoringCoreInfoResponseDto;
 import com.example.section.dto.out.MentoringResponseDto;
 import com.example.section.messagequeue.messageIn.MentoringEditRequestOutDto;
 import com.example.section.entity.Mentoring;
-import com.example.section.messagequeue.messageIn.ReviewStarDto;
+import com.example.section.messagequeue.messageIn.MentoringOverviewDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -17,7 +17,7 @@ public interface CustomMentoringRepository {
     void decreaseNowSessionCountByUuid(String mentoringUuid, int count);
     void decreaseNowSessionCountById(String mentoringId, int count);
 
-    void updateReviewStar(ReviewStarDto dto);
+    void updateMentoringOverview(MentoringOverviewDto dto);
 
     List<Mentoring> getReusableMentoringListByMentorUuid(String userUuid);
 
@@ -30,6 +30,8 @@ public interface CustomMentoringRepository {
     Page<MentoringCoreInfoResponseDto> searchByCategoryCodesPagination(String topCategoryCode, String middleCategoryCode, String bottomCategoryCode, Pageable pageable);
 
     Page<MentoringCoreInfoResponseDto> searchByNamePagination(String name, Pageable pageable);
+
+    List<MentoringCoreInfoResponseDto> findPopularMentoringList(List<String> topCategoryCodeList);
 
 
 

@@ -5,12 +5,11 @@ import com.example.section.messagequeue.messageIn.MentoringAddAfterOutDto;
 import com.example.section.messagequeue.messageIn.MentoringEditRequestOutDto;
 import com.example.section.dto.out.MentoringResponseDto;
 import com.example.section.dto.out.MentoringReusableResponseDto;
-import com.example.section.entity.Mentoring;
 import com.example.section.entity.MentoringSession;
 import com.example.section.infrastructure.MentoringMongoRepository;
 import com.example.section.infrastructure.MentoringSessionMongoRepository;
 import com.example.section.infrastructure.custom.CustomMentoringRepository;
-import com.example.section.messagequeue.messageIn.ReviewStarDto;
+import com.example.section.messagequeue.messageIn.MentoringOverviewDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -83,6 +82,12 @@ public class MentoringServiceImpl implements MentoringService {
         return customMentoringRepository.searchByNamePagination(name, pageable);
     }
 
+    @Override
+    public List<MentoringCoreInfoResponseDto> findPopularMentoringList(List<String> topCategoryCodeList) {
+        return customMentoringRepository.findPopularMentoringList(topCategoryCodeList);
+
+    }
+
 
     @Override
     public void updateMentoring(MentoringEditRequestOutDto mentoringEditRequestOutDto) {
@@ -105,8 +110,8 @@ public class MentoringServiceImpl implements MentoringService {
     }
 
     @Override
-    public void updateReviewStar(ReviewStarDto dto) {
-        customMentoringRepository.updateReviewStar(dto);
+    public void updateMentoringOverview(MentoringOverviewDto dto) {
+        customMentoringRepository.updateMentoringOverview(dto);
     }
 
 
