@@ -34,6 +34,9 @@ public class Mentoring {
 
     private Boolean isReusable;
 
+    private Long reviewCount;
+    private Double averageStar;
+
     private Boolean isDeleted;
 
     private LocalDateTime createdAt;

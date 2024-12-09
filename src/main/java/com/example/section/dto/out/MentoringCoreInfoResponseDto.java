@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class MentoringCoreInfoResponseDto {
     private String mentoringUuid;
+    private Long reviewCount;
+    private Double averageStar;
     private String name;
     private String description;
     private String thumbnailUrl;
@@ -26,6 +28,8 @@ public class MentoringCoreInfoResponseDto {
                 .thumbnailUrl(mentoring.getThumbnailUrl())
                 .isAvailable(mentoring.getNowSessionCount()!=null && mentoring.getNowSessionCount() > 0)
                 .nowSessionCount(mentoring.getNowSessionCount())
+                .reviewCount(mentoring.getReviewCount() == null ? 0 : mentoring.getReviewCount())
+                .averageStar(mentoring.getAverageStar() == null ? 0 : mentoring.getAverageStar())
                 .build();
     }
 

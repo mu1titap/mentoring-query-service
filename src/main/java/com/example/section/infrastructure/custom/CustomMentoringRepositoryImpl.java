@@ -4,6 +4,7 @@ import com.example.section.dto.out.MentoringCoreInfoResponseDto;
 import com.example.section.dto.out.MentoringResponseDto;
 import com.example.section.messagequeue.messageIn.MentoringEditRequestOutDto;
 import com.example.section.entity.Mentoring;
+import com.example.section.messagequeue.messageIn.ReviewStarDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.bson.Document;
@@ -81,6 +82,16 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
     }
 
     @Override
+    public void updateReviewStar(ReviewStarDto dto) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("mentoringUuid").is(dto.getMentoringUuid()));
+        Update update = new Update();
+        update.set("reviewCount", dto.getReviewCount());
+        update.set("averageStar", dto.getAverageStar());
+        mongoTemplate.updateFirst(query, update, Mentoring.class);
+    }
+
+    @Override
     public List<Mentoring> getReusableMentoringListByMentorUuid(String userUuid) {
         Query query = new Query();
         query.addCriteria(Criteria.where("mentorUuid").is(userUuid));
@@ -112,6 +123,8 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
                     .and("thumbnailUrl").as("thumbnailUrl")
                     .and("prioritySort").as("isAvailable")
                     .and("nowSessionCount").as("nowSessionCount")
+                    .and("reviewCount").as("reviewCount")
+                    .and("averageStar").as("averageStar")
         );
 
         return mongoTemplate.aggregate(aggregation, "mentoring", MentoringCoreInfoResponseDto.class)
@@ -139,7 +152,9 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
                         .and("description").as("description")
                         .and("thumbnailUrl").as("thumbnailUrl")
                         .and("prioritySort").as("isAvailable")
-                        .and("nowSessionCount").as("nowSessionCount"),
+                        .and("nowSessionCount").as("nowSessionCount")
+                        .and("reviewCount").as("reviewCount")
+                        .and("averageStar").as("averageStar"),
                 // 페이지네이션 처리
                 Aggregation.skip(pageable.getOffset()),
                 Aggregation.limit(pageable.getPageSize())
@@ -205,7 +220,9 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
                         .and("description").as("description")
                         .and("thumbnailUrl").as("thumbnailUrl")
                         .and("prioritySort").as("isAvailable")
-                        .and("nowSessionCount").as("nowSessionCount"),
+                        .and("nowSessionCount").as("nowSessionCount")
+                        .and("reviewCount").as("reviewCount")
+                        .and("averageStar").as("averageStar"),
                 // 페이지네이션 처리
                 Aggregation.skip(pageable.getOffset()),
                 Aggregation.limit(pageable.getPageSize())
@@ -250,7 +267,9 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
                         .and("description").as("description")
                         .and("thumbnailUrl").as("thumbnailUrl")
                         .and("prioritySort").as("isAvailable")
-                        .and("nowSessionCount").as("nowSessionCount"),
+                        .and("nowSessionCount").as("nowSessionCount")
+                        .and("reviewCount").as("reviewCount")
+                        .and("averageStar").as("averageStar"),
                 // 페이지네이션 처리
                 Aggregation.skip(pageable.getOffset()),
                 Aggregation.limit(pageable.getPageSize())
