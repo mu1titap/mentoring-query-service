@@ -35,7 +35,7 @@ public class MentoringController {
     @Operation(summary = "카테고리 코드로 멘토링 조회" , description = "카테고리 코드로 조회 <br/>" +
             "topCategoryCode 만 필수, middleCategoryCode, bottomCategoryCode 는 선택"
             ,tags = {"멘토링"})
-    @GetMapping("mentoring/by-category")
+    @GetMapping("mentoring/category")
     public BaseResponse<List<MentoringResponseDto> > findAllByCategoryCodes(
             @RequestParam(name = "topCategoryCode") String topCategoryCode,
             @RequestParam(name = "middleCategoryCode",required = false) String middleCategoryCode,
