@@ -25,7 +25,6 @@ import java.util.List;
 public class MentoringController {
     private final MentoringService mentoringQueryService;
 
-
     @Operation(summary = "멘토링 uuid로 멘토링 단 건 조회" , description = "멘토링 UUID 로 멘토링 조회" ,tags = {"멘토링"})
     @GetMapping("mentoring/{mentoringUuid}")
     public BaseResponse<MentoringResponseDto> getMentoring(@PathVariable("mentoringUuid") String mentoringUuid) {

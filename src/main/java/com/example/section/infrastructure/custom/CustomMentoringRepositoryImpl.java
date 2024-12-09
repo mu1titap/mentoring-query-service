@@ -121,15 +121,15 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
                 Aggregation.sort(isMentor ? Sort.by(Sort.Order.desc("updatedAt"))
                         : Sort.by(Sort.Order.desc("prioritySort")).and(Sort.by(Sort.Order.desc("updatedAt")))),
             Aggregation.project("mentoringUuid", "name", "description" , "thumbnailUrl", "prioritySort", "nowSessionCount",
-                            "reviewCount", "averageStar", "totalSaleCount")
+                            "totalReviewCount", "reviewStarAvg", "totalSaleCount")
                     .and("mentoringUuid").as("mentoringUuid")
                     .and("name").as("name")
                     .and("description").as("description")
                     .and("thumbnailUrl").as("thumbnailUrl")
                     .and("prioritySort").as("isAvailable")
                     .and("nowSessionCount").as("nowSessionCount")
-                    .and("reviewCount").as("reviewCount")
-                    .and("averageStar").as("averageStar")
+                    .and("totalReviewCount").as("reviewCount")
+                    .and("reviewStarAvg").as("averageStar")
                     .and("totalSaleCount").as("totalSaleCount")
         );
 
@@ -153,15 +153,15 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
                 Aggregation.sort(isMentor ? Sort.by(Sort.Order.desc("updatedAt"))
                         : Sort.by(Sort.Order.desc("prioritySort")).and(Sort.by(Sort.Order.desc("updatedAt")))),
                 Aggregation.project("mentoringUuid", "name", "description", "thumbnailUrl", "prioritySort", "nowSessionCount",
-                                "reviewCount", "averageStar", "totalSaleCount")
+                                "totalReviewCount", "reviewStarAvg", "totalSaleCount")
                         .and("mentoringUuid").as("mentoringUuid")
                         .and("name").as("name")
                         .and("description").as("description")
                         .and("thumbnailUrl").as("thumbnailUrl")
                         .and("prioritySort").as("isAvailable")
                         .and("nowSessionCount").as("nowSessionCount")
-                        .and("reviewCount").as("reviewCount")
-                        .and("averageStar").as("averageStar")
+                        .and("totalReviewCount").as("reviewCount")
+                        .and("reviewStarAvg").as("averageStar")
                         .and("totalSaleCount").as("totalSaleCount"),
                 // 페이지네이션 처리
                 Aggregation.skip(pageable.getOffset()),
@@ -223,15 +223,15 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
                 Aggregation.sort(Sort.by(Sort.Order.desc("prioritySort")).and(Sort.by(Sort.Order.desc("updatedAt")))),
 
                 Aggregation.project("mentoringUuid", "name", "description", "thumbnailUrl", "prioritySort", "nowSessionCount",
-                                "reviewCount", "averageStar", "totalSaleCount")
+                                "totalReviewCount", "reviewStarAvg", "totalSaleCount")
                         .and("mentoringUuid").as("mentoringUuid")
                         .and("name").as("name")
                         .and("description").as("description")
                         .and("thumbnailUrl").as("thumbnailUrl")
                         .and("prioritySort").as("isAvailable")
                         .and("nowSessionCount").as("nowSessionCount")
-                        .and("reviewCount").as("reviewCount")
-                        .and("averageStar").as("averageStar")
+                        .and("totalReviewCount").as("reviewCount")
+                        .and("reviewStarAvg").as("averageStar")
                         .and("totalSaleCount").as("totalSaleCount")
                 ,
                 // 페이지네이션 처리
@@ -280,8 +280,8 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
                         .and("thumbnailUrl").as("thumbnailUrl")
                         .and("prioritySort").as("isAvailable")
                         .and("nowSessionCount").as("nowSessionCount")
-                        .and("reviewCount").as("reviewCount")
-                        .and("averageStar").as("averageStar")
+                        .and("totalReviewCount").as("reviewCount")
+                        .and("reviewStarAvg").as("averageStar")
                         .and("totalSaleCount").as("totalSaleCount")
                 ,
                 // 페이지네이션 처리
