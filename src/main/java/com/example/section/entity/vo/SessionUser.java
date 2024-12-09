@@ -9,5 +9,6 @@ import lombok.*;
 @ToString
 public class SessionUser {
     private String userUuid;
+    private String nickName;
     private String menteeImageUrl;
 }
