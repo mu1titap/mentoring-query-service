@@ -15,7 +15,6 @@ public interface CustomSessionRepository {
     void cancelSessionUser(CancelSessionUserMessage dto);
     void reRegisterSessionUser(ReRegisterSessionUserMessage dto);
 
-    List<MentoringSession> findAllByMentoringUuidAndDeadlineDate(String mentoringUuid);
     List<MentoringSessionResponseDto> findAllByMentoringUuidAndDeadlineDateV2(String mentoringUuid, String userUuid);
 
     void updateSessionConfirmed(SessionConfirmedMessage dto);

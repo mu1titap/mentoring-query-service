@@ -41,7 +41,7 @@ public class MentoringSessionResponseDto {
 
     private Boolean isClosed;
 
-    private List<SessionUser> sessionUserList;
+    private List<SessionUserResponseDto> sessionUserList;
 
 
     public static MentoringSessionResponseDto from(MentoringSession mentoringSession){
