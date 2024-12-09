@@ -28,35 +28,6 @@ public class SessionServiceImpl implements  SessionService {
         return MentoringSessionResponseDto.from(mentoringSessionMongoRepository.findBySessionUuid(sessionUuid));
     }
 
-    /**
-     * 1. mentoringUuid 으로 세션 리스트 출력
-     * 2. userUuid 로 참여중인 세션 확인
-     */
-    @Override
-    public List<MentoringSessionResponseDto> findByMentoringUuidAndDeadlineDate(String mentoringUuid, String userUuid) {
-        List<MentoringSession> sessionList = customSessionRepository.findAllByMentoringUuidAndDeadlineDate(mentoringUuid);
-
-        List<MentoringSessionResponseDto> result = new ArrayList<>();
-        boolean isParticipating;
-        // 세션들을 돌면서 유저가 참여중인 세션인지 체크 한 뒤 Dto 로 변환
-        for (MentoringSession session : sessionList) {
-            isParticipating = false;
-            // 세션의 참가자 리스트
-            List<SessionUser> sessionUserList = session.getSessionUsers();
-            if(userUuid != null && sessionUserList != null && !sessionUserList.isEmpty()) { // userUuid 로 참여중인 세션인지 확인
-                for (SessionUser sessionUser : sessionUserList) {
-                    if (sessionUser.getUserUuid().equals(userUuid)) {
-                        isParticipating = true;
-                        result.add(setUserParticipatingInfo(session, isParticipating));
-                        break;
-                    }
-                }
-            }
-            else result.add(setUserParticipatingInfo(session, isParticipating));
-        }
-        return result;
-
-    }
 
     @Override
     public List<SessionListResponseDto> findByMentoringUuidAndDeadlineDateV2(String mentoringUuid, String userUuid) {

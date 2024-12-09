@@ -74,17 +74,6 @@ public class CustomSessionRepositoryImpl implements CustomSessionRepository {
         mongoTemplate.updateFirst(query, update, MentoringSession.class);
     }
 
-    @Override
-    public List<MentoringSession> findAllByMentoringUuidAndDeadlineDate(String mentoringUuid) {
-        Query query = new Query();
-        query.addCriteria(Criteria.where("mentoringUuid").is(mentoringUuid)
-                .and("isDeleted").is(false) // 삭제되지 않은 세션
-                .and("deadlineDate").gte(LocalDate.now()) // 오늘 까지의 데이터 조회 >=
-        );
-        query.with(Sort.by(Sort.Order.asc("startDate"))
-        .and(Sort.by(Sort.Order.asc( "startTime"))));
-        return mongoTemplate.find(query, MentoringSession.class);
-    }
 
     @Override
     public List<MentoringSessionResponseDto> findAllByMentoringUuidAndDeadlineDateV2(String mentoringUuid, String userUuid) {
@@ -108,8 +97,8 @@ public class CustomSessionRepositoryImpl implements CustomSessionRepository {
                                 "deadlineDate", "minHeadCount", "maxHeadCount", "nowHeadCount", "isParticipating", "price", "isClosed")
                         .push(new BasicDBObject()
                                 .append("menteeImageUrl", "$sessionUsers.menteeImageUrl")
-                                .append("nickName", "$sessionUsers.nickName")
-                                .append("userUuid", "$sessionUsers.userUuid"))
+                                .append("nickName", "$sessionUsers.nickName"))
+                                //.append("userUuid", "$sessionUsers.userUuid"))
                         .as("sessionUserList"),
                 // 정렬
                 Aggregation.sort(Sort.by(Sort.Order.asc("startDate"))

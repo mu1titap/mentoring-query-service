@@ -15,7 +15,6 @@ public interface SessionService {
 
     MentoringSessionResponseDto findBySessionUuid(String sessionUuid);
 
-    List<MentoringSessionResponseDto> findByMentoringUuidAndDeadlineDate(String mentoringUuid, String userUuid);
 
     List<SessionListResponseDto> findByMentoringUuidAndDeadlineDateV2(String mentoringUuid, String userUuid);
 
