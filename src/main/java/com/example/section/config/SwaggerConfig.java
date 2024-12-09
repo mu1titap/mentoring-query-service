@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SwaggerConfig {
-
+    //
     private static final String BEARER_TOKEN_PREFIX = "Bearer";
     @Value("${swagger.uri}")
     private String swaggerUri;
