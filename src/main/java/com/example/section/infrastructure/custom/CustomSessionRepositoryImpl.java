@@ -108,6 +108,7 @@ public class CustomSessionRepositoryImpl implements CustomSessionRepository {
                                 "deadlineDate", "minHeadCount", "maxHeadCount", "nowHeadCount", "isParticipating", "price", "isClosed")
                         .push(new BasicDBObject()
                                 .append("menteeImageUrl", "$sessionUsers.menteeImageUrl")
+                                .append("nickName", "$sessionUsers.nickName")
                                 .append("userUuid", "$sessionUsers.userUuid"))
                         .as("sessionUserList"),
                 // 정렬

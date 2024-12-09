@@ -91,6 +91,15 @@ public class KafkaConsumer {
         sessionService.updateSessionConfirmed(dto);
     }
 
+    /**
+     * 멘토링 별 리뷰 집계
+     */
+    //
+    @KafkaListener(topics = "review-aggregation-topic", groupId = "kafka-mentoring-query-service",
+            containerFactory = "reviewAggregationListener")
+    public void updateReviewStar(ReviewStarDto dto) {
+        mentoringService.updateReviewStar(dto);
+    }
 
 
 

@@ -10,6 +10,7 @@ import com.example.section.entity.MentoringSession;
 import com.example.section.infrastructure.MentoringMongoRepository;
 import com.example.section.infrastructure.MentoringSessionMongoRepository;
 import com.example.section.infrastructure.custom.CustomMentoringRepository;
+import com.example.section.messagequeue.messageIn.ReviewStarDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -101,6 +102,11 @@ public class MentoringServiceImpl implements MentoringService {
     @Override
     public void decreaseNowSessionCountById(String mentoringId, int count) {
         customMentoringRepository.decreaseNowSessionCountById(mentoringId, count);
+    }
+
+    @Override
+    public void updateReviewStar(ReviewStarDto dto) {
+        customMentoringRepository.updateReviewStar(dto);
     }
 
 

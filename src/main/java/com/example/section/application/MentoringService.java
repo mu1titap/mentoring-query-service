@@ -6,6 +6,7 @@ import com.example.section.messagequeue.messageIn.MentoringEditRequestOutDto;
 import com.example.section.dto.out.MentoringResponseDto;
 import com.example.section.dto.out.MentoringReusableResponseDto;
 import com.example.section.entity.Mentoring;
+import com.example.section.messagequeue.messageIn.ReviewStarDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,5 +41,8 @@ public interface MentoringService {
 
     @Transactional
     void decreaseNowSessionCountById(String mentoringId, int count);
+
+    @Transactional
+    void updateReviewStar(ReviewStarDto dto);
 
 }
