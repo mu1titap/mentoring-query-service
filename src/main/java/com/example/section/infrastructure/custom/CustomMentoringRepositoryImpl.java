@@ -123,6 +123,8 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
                     .and("thumbnailUrl").as("thumbnailUrl")
                     .and("prioritySort").as("isAvailable")
                     .and("nowSessionCount").as("nowSessionCount")
+                    .and("reviewCount").as("reviewCount")
+                    .and("averageStar").as("averageStar")
         );
 
         return mongoTemplate.aggregate(aggregation, "mentoring", MentoringCoreInfoResponseDto.class)
@@ -150,7 +152,9 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
                         .and("description").as("description")
                         .and("thumbnailUrl").as("thumbnailUrl")
                         .and("prioritySort").as("isAvailable")
-                        .and("nowSessionCount").as("nowSessionCount"),
+                        .and("nowSessionCount").as("nowSessionCount")
+                        .and("reviewCount").as("reviewCount")
+                        .and("averageStar").as("averageStar"),
                 // 페이지네이션 처리
                 Aggregation.skip(pageable.getOffset()),
                 Aggregation.limit(pageable.getPageSize())
@@ -216,7 +220,9 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
                         .and("description").as("description")
                         .and("thumbnailUrl").as("thumbnailUrl")
                         .and("prioritySort").as("isAvailable")
-                        .and("nowSessionCount").as("nowSessionCount"),
+                        .and("nowSessionCount").as("nowSessionCount")
+                        .and("reviewCount").as("reviewCount")
+                        .and("averageStar").as("averageStar"),
                 // 페이지네이션 처리
                 Aggregation.skip(pageable.getOffset()),
                 Aggregation.limit(pageable.getPageSize())
