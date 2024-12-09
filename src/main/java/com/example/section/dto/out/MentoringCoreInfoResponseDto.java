@@ -12,25 +12,14 @@ import lombok.NoArgsConstructor;
 @Builder
 public class MentoringCoreInfoResponseDto {
     private String mentoringUuid;
-    private Long reviewCount;
-    private Double averageStar;
+    private Long reviewCount; // 리뷰 수
+    private Double averageStar;// 리뷰 별점 평균
+    private Long totalSaleCount;// 총 판매 수
     private String name;
     private String description;
     private String thumbnailUrl;
     private Boolean isAvailable;
     private Integer nowSessionCount;
 
-    public static MentoringCoreInfoResponseDto from (Mentoring mentoring) {
-        return MentoringCoreInfoResponseDto.builder()
-                .mentoringUuid(mentoring.getMentoringUuid())
-                .name(mentoring.getName())
-                .description(mentoring.getDescription())
-                .thumbnailUrl(mentoring.getThumbnailUrl())
-                .isAvailable(mentoring.getNowSessionCount()!=null && mentoring.getNowSessionCount() > 0)
-                .nowSessionCount(mentoring.getNowSessionCount())
-                .reviewCount(mentoring.getReviewCount() == null ? 0 : mentoring.getReviewCount())
-                .averageStar(mentoring.getAverageStar() == null ? 0 : mentoring.getAverageStar())
-                .build();
-    }
 
 }

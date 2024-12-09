@@ -105,4 +105,18 @@ public class MentoringController {
         return new BaseResponse<>(mentoringQueryService.searchByNamePagination(name, pageable));
     }
 
+    // popularMentoring
+    @Operation(summary = "인기 멘토링 조회" ,
+            description = "1. topCategoryCodeList 필수 아님.<br/>"+
+                    "2. 기본적으로 100개 가져옴.<br/>"+
+                    "3. 정렬기준 == 세션 존재하는 것 > 점수(리뷰+판매) 내림차순. 업데이트 시간 내림차순<br/>"
+            ,tags = {"멘토링"} )
+    @GetMapping("/popular-mentoring-list")
+    public BaseResponse<List<MentoringCoreInfoResponseDto>> findPopularMentoringList(
+            @ParameterObject @RequestParam(name = "topCategoryCodeList", required = false) List<String> topCategoryCodeList
+    )
+    {
+        return new BaseResponse<>(mentoringQueryService.findPopularMentoringList(topCategoryCodeList));
+    }
+
 }

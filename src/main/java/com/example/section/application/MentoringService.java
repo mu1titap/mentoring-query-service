@@ -6,7 +6,7 @@ import com.example.section.messagequeue.messageIn.MentoringEditRequestOutDto;
 import com.example.section.dto.out.MentoringResponseDto;
 import com.example.section.dto.out.MentoringReusableResponseDto;
 import com.example.section.entity.Mentoring;
-import com.example.section.messagequeue.messageIn.ReviewStarDto;
+import com.example.section.messagequeue.messageIn.MentoringOverviewDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +29,11 @@ public interface MentoringService {
 
     Page<MentoringCoreInfoResponseDto> searchByNamePagination(String name, Pageable pageable);
 
+    // 인기 벤토링
+    List<MentoringCoreInfoResponseDto> findPopularMentoringList(List<String> topCategoryCodeList);
+
+    //List<>
+
     @Transactional
     void createMentoringWithSession(MentoringAddAfterOutDto mentoringAddAfterDto);
     @Transactional
@@ -43,6 +48,6 @@ public interface MentoringService {
     void decreaseNowSessionCountById(String mentoringId, int count);
 
     @Transactional
-    void updateReviewStar(ReviewStarDto dto);
+    void updateMentoringOverview(MentoringOverviewDto dto);
 
 }
