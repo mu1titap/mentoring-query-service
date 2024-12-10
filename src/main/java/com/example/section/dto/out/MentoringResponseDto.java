@@ -1,7 +1,9 @@
 package com.example.section.dto.out;
 
+import com.example.section.messagequeue.messageIn.AfterHashtag;
 import com.example.section.messagequeue.messageIn.MentoringCategoryAfterOutDto;
 import com.example.section.entity.Mentoring;
+import com.example.section.messagequeue.messageIn.MentoringHashTagAfterOutDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,8 +19,12 @@ import java.util.List;
 public class MentoringResponseDto {
 
     private String mentoringUuid;
-
     private String name;
+
+    private Long totalReviewCount;
+    private Double reviewStarAvg;
+    private Long totalSaleCount;
+
 
     private String detail;
 
@@ -34,11 +40,15 @@ public class MentoringResponseDto {
     private LocalDateTime updatedAt;
 
     private List<MentoringCategoryResponseDto> categoryList;
+    private List<MentoringHashTagResponseDto> hashTagList;
 
     public static MentoringResponseDto fromEntity(Mentoring mentoring) {
         return mentoring != null ? MentoringResponseDto.builder()
                 .mentoringUuid(mentoring.getMentoringUuid())
                 .name(mentoring.getName())
+                .totalReviewCount(mentoring.getTotalReviewCount()!=null?mentoring.getTotalReviewCount():0)
+                .reviewStarAvg(mentoring.getReviewStarAvg()!=null?mentoring.getReviewStarAvg():0)
+                .totalSaleCount(mentoring.getTotalSaleCount()!=null?mentoring.getTotalSaleCount():0)
                 .detail(mentoring.getDetail())
                 .mentorUuid(mentoring.getMentorUuid())
                 .thumbnailUrl(mentoring.getThumbnailUrl())
@@ -46,11 +56,12 @@ public class MentoringResponseDto {
                 .isDeleted(mentoring.getIsDeleted())
                 .createdAt(mentoring.getCreatedAt())
                 .updatedAt(mentoring.getUpdatedAt())
-                .categoryList(from(mentoring.getMentoringCategoryList()))
+                .categoryList(getCategory(mentoring.getMentoringCategoryList()))
+                .hashTagList(getHashTag(mentoring.getMentoringHashTagList()))
                 .build() : null;
     }
 
-    public static List<MentoringCategoryResponseDto> from(
+    public static List<MentoringCategoryResponseDto> getCategory(
             List<MentoringCategoryAfterOutDto> mentoringCategories)
     {
         return mentoringCategories != null ? mentoringCategories.stream()
@@ -61,6 +72,16 @@ public class MentoringResponseDto {
                         .topCategoryName(categoryResponse.getTopCategoryName())
                         .middleCategoryName(categoryResponse.getMiddleCategoryName())
                         .bottomCategoryName(categoryResponse.getBottomCategoryName())
+                        .build())
+                .toList() : null;
+    }
+    public static List<MentoringHashTagResponseDto> getHashTag(
+            List<AfterHashtag> mentoringHashTagList)
+    {
+        return mentoringHashTagList != null ? mentoringHashTagList.stream()
+                .map(hashTagResponse -> MentoringHashTagResponseDto.builder()
+                        .hashtagId(hashTagResponse.getHashtagId())
+                        .hashtagName(hashTagResponse.getHashtagName())
                         .build())
                 .toList() : null;
     }

@@ -25,23 +25,12 @@ import java.util.List;
 public class MentoringController {
     private final MentoringService mentoringQueryService;
 
-    @Operation(summary = "멘토링 uuid로 멘토링 단 건 조회" , description = "멘토링 UUID 로 멘토링 조회" ,tags = {"멘토링"})
+    @Operation(summary = "멘토링 uuid로 멘토링 단 건 조회(카테고리,해시태그 정보 다 포함)" , description = "멘토링 UUID 로 멘토링 조회" ,tags = {"멘토링"})
     @GetMapping("mentoring/{mentoringUuid}")
     public BaseResponse<MentoringResponseDto> getMentoring(@PathVariable("mentoringUuid") String mentoringUuid) {
         return new BaseResponse<>(mentoringQueryService.getMentoringByMentoringUuid(mentoringUuid));
     }
 
-    @Operation(summary = "카테고리 코드로 멘토링 조회" , description = "카테고리 코드로 조회 <br/>" +
-            "topCategoryCode 만 필수, middleCategoryCode, bottomCategoryCode 는 선택"
-            ,tags = {"멘토링"})
-    @GetMapping("mentoring/category")
-    public BaseResponse<List<MentoringResponseDto> > findAllByCategoryCodes(
-            @RequestParam(name = "topCategoryCode") String topCategoryCode,
-            @RequestParam(name = "middleCategoryCode",required = false) String middleCategoryCode,
-            @RequestParam(name = "bottomCategoryCode", required = false) String bottomCategoryCode
-    ) {
-        return new BaseResponse<>(mentoringQueryService.findAllByCategoryCodes(topCategoryCode, middleCategoryCode, bottomCategoryCode));
-    }
     @Operation(summary = "카테고리 코드로 멘토링 조회 (페이지네이션)" , description = "카테고리 코드로 조회 <br/>" +
             "topCategoryCode 만 필수, middleCategoryCode, bottomCategoryCode 는 선택 <br/>."+
             "오프셋 베이스 페이지네이션 적용"
