@@ -21,5 +21,4 @@ public class MentoringCoreInfoResponseDto {
     private Boolean isAvailable;
     private Integer nowSessionCount;
 
-
 }
