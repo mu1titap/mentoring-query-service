@@ -5,7 +5,10 @@ import com.example.section.common.entity.BaseResponse;
 import com.example.section.dto.out.MentoringSessionResponseDto;
 import com.example.section.dto.out.SessionListResponseDto;
 import com.example.section.dto.out.SessionRoomResponseDto;
+import com.example.section.entity.EsMentoring;
+import com.example.section.infrastructure.MentoringElasticRepository;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +23,7 @@ import java.util.Map;
 @RequestMapping("/api/v1/mentoring-query-service")
 public class SessionController {
     private final SessionService sessionService;
+    private final MentoringElasticRepository mentoringElasticRepository;
 //    @Operation(summary = "멘토링 세션 리스트 조회 (멘토링uuid, 유저uuid)"
 //            ,description = "조회 조건은 예약마감일 마감 전 까지.<br/>" +
 //            "유저 uuid는 필수 아님.<br/>" +
@@ -70,4 +74,15 @@ public BaseResponse<List<SessionListResponseDto>> getMentoringSessions(
         log.info("/mentor-info/{sessionUuid} 실행됨");
         return sessionService.getMentorUuidBySessionUuid(sessionUuid);
     }
+
+    @PostMapping("/test/{test}")
+    public void test(@PathVariable("test") String test) {
+        EsMentoring esMentoring = EsMentoring.builder()
+                .id("1")
+                .name("특급 개발자의 카프카 멘토링")
+                .description("2시간 동안 실무 개발자와 함께 카프카를 배워보세요")
+                .build();
+        mentoringElasticRepository.save(esMentoring);
+    }
+
 }
