@@ -6,17 +6,22 @@ import co.elastic.clients.elasticsearch.core.search.CompletionSuggestOption;
 import co.elastic.clients.elasticsearch.indices.AnalyzeResponse;
 import co.elastic.clients.elasticsearch.indices.analyze.AnalyzeToken;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class ElasticsearchServiceImpl implements ElasticsearchService{
     private final ElasticsearchClient elasticsearchClient;
-
+    private final ChosungAnalyzeService chosungAnalyzeService;
     @Override
     public List<String> analyzeText(String text) {
         try {
@@ -27,10 +32,22 @@ public class ElasticsearchServiceImpl implements ElasticsearchService{
                     .text(text)
             );
 
-            // 분석 결과에서 토큰 추출
-            return response.tokens().stream()
+            // Nori 분석 결과에서 토큰 추출 및 중복 제거
+            List<String> tokens = response.tokens().stream()
                     .map(AnalyzeToken::token) // AnalyzeToken 객체에서 토큰 추출
+                    .distinct() // 중복 제거
                     .collect(Collectors.toList());
+            log.info("tokens: {}", Arrays.toString(tokens.toArray()));
+            // 새로운 리스트에 초성 추가
+            List<String> chosungTokens = tokens.stream()
+                    .filter(token -> chosungAnalyzeService.isKorean(token) && token.length() > 1) // 한글이고 1글자 이상 필터링
+                    .map(chosungAnalyzeService::extractChosung) // 초성 추출
+                    .toList();
+
+            // 기존 토큰 리스트와 초성 리스트를 합침
+            tokens.addAll(chosungTokens);
+
+            return tokens;
 
         } catch (IOException e) {
             throw new RuntimeException("Failed to analyze text with Elasticsearch", e);

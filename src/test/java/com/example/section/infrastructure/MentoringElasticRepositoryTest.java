@@ -28,7 +28,7 @@ class MentoringElasticRepositoryTest {
 
     @Test
     void createEsMentoring() {
-        String name = "고전게임 포트리스 멘토링";
+        String name = "잠실역";
         List<String> strings = elasticsearchService.analyzeText(name);
         Completion completion = new Completion(strings.toArray(new String[0]));
         EsMentoring esMentoring = EsMentoring.builder()
@@ -40,7 +40,7 @@ class MentoringElasticRepositoryTest {
 
     @Test
     void analyzeEsMentoring() {
-        String name = "포트나이트";
+        String name = "자소서";
         List<String> strings = elasticsearchService.analyzeText(name);
         log.info(Arrays.toString(strings.toArray()));
     }
@@ -48,19 +48,20 @@ class MentoringElasticRepositoryTest {
     @Test
     void getSuggestions(){
         List<String> result = elasticsearchService.getSuggestions("ㅍㅌ");
-        log.info(Arrays.toString(new List[]{result}));
+        log.info("result : "+result.size());
+        log.info(Arrays.toString(result.toArray()));
 
     }
 
-//    @Test
-//    void mentoringReadDataSynchronization(){
-//        List<Mentoring> all = mentoringMongoRepository.findAll();
-//        log.info("all size : "+all.size());
-//        all.stream()
-//                .map(mentoring -> {
-//                    List<String> analysisResult = elasticsearchService.analyzeText(mentoring.getName());
-//                    return mentoring.toEsEntity(mentoring, analysisResult);
-//                })
-//                .forEach(mentoringElasticRepository::save);
-//    }
+    @Test
+    void mentoringReadDataSynchronization(){
+        List<Mentoring> all = mentoringMongoRepository.findAll();
+        log.info("all size : "+all.size());
+        all.stream()
+                .map(mentoring -> {
+                    List<String> analysisResult = elasticsearchService.analyzeText(mentoring.getName());
+                    return mentoring.toEsEntity(mentoring, analysisResult);
+                })
+                .forEach(mentoringElasticRepository::save);
+    }
 }
