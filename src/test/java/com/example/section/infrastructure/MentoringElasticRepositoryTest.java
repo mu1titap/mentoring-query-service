@@ -47,7 +47,7 @@ class MentoringElasticRepositoryTest {
 
     @Test
     void getSuggestions(){
-        List<String> result = elasticsearchService.getSuggestions("포르트");
+        List<String> result = elasticsearchService.getSuggestions("ㅍㅌ");
         log.info(Arrays.toString(new List[]{result}));
 
     }

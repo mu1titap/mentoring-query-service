@@ -11,7 +11,7 @@ import org.springframework.data.elasticsearch.core.suggest.Completion;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Setting( replicas = 0,settingPath = "es-analyzer.json")
+@Setting( replicas = 0)
 //@Setting( replicas = 0)
 public class EsMentoring {
     @Id // ElasticSearch 문서의 고유 식별자
