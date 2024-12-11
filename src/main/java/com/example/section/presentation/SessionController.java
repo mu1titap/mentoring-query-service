@@ -5,17 +5,14 @@ import com.example.section.common.entity.BaseResponse;
 import com.example.section.dto.out.MentoringSessionResponseDto;
 import com.example.section.dto.out.SessionListResponseDto;
 import com.example.section.dto.out.SessionRoomResponseDto;
-import com.example.section.entity.EsMentoring;
-import com.example.section.infrastructure.MentoringElasticRepository;
+import com.example.section.elasticSearch.entity.EsMentoring;
+import com.example.section.elasticSearch.infrastructure.MentoringElasticRepository;
 import io.swagger.v3.oas.annotations.Operation;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 @Log4j2
 @RestController
@@ -75,14 +72,6 @@ public BaseResponse<List<SessionListResponseDto>> getMentoringSessions(
         return sessionService.getMentorUuidBySessionUuid(sessionUuid);
     }
 
-    @PostMapping("/test/{test}")
-    public void test(@PathVariable("test") String test) {
-        EsMentoring esMentoring = EsMentoring.builder()
-                .id("1")
-                .name("특급 개발자의 카프카 멘토링")
-                .description("2시간 동안 실무 개발자와 함께 카프카를 배워보세요")
-                .build();
-        mentoringElasticRepository.save(esMentoring);
-    }
+
 
 }
