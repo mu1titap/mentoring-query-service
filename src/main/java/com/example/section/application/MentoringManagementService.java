@@ -1,5 +1,6 @@
 package com.example.section.application;
 
+import com.example.section.dto.out.MainMentoringResponseDto;
 import com.example.section.dto.out.MentoringResponseDto;
 
 import java.util.List;
@@ -9,6 +10,6 @@ public interface MentoringManagementService {
 
     void unSetMainMentoring(String mentoringUuid);
 
-    List<MentoringResponseDto> getMainMentoringList();
+    List<MainMentoringResponseDto> getMainMentoringList();
 
 }

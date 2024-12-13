@@ -1,5 +1,6 @@
 package com.example.section.infrastructure.custom;
 
+import com.example.section.dto.out.MainMentoringResponseDto;
 import com.example.section.dto.out.MentoringCoreInfoResponseDto;
 import com.example.section.dto.out.MentoringResponseDto;
 import com.example.section.messagequeue.messageIn.MentoringEditRequestOutDto;
@@ -377,13 +378,13 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
     }
 
     @Override
-    public List<MentoringResponseDto> getMainMentoringList() {
+    public List<MainMentoringResponseDto> getMainMentoringList() {
         Query query = new Query();
         query.addCriteria(Criteria.where("isMain").is(true));
         query.with(Sort.by(Sort.Order.desc("updatedAt")));
         query.limit(10);
         List<Mentoring> mainMentoringList = mongoTemplate.find(query, Mentoring.class);
-        return mainMentoringList.stream().map(MentoringResponseDto::fromEntity).toList();
+        return mainMentoringList.stream().map(MainMentoringResponseDto::from).toList();
     }
 
 }

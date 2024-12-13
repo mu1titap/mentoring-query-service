@@ -4,6 +4,7 @@ import com.example.section.application.MentoringManagementService;
 import com.example.section.application.MentoringService;
 import com.example.section.common.entity.BaseResponse;
 import com.example.section.common.entity.BaseResponseStatus;
+import com.example.section.dto.out.MainMentoringResponseDto;
 import com.example.section.dto.out.MentoringCoreInfoResponseDto;
 import com.example.section.dto.out.MentoringResponseDto;
 import com.example.section.dto.out.MentoringReusableResponseDto;
@@ -44,7 +45,7 @@ public class MentoringManagementController {
             "- 업데이트 시간 내림차순으로 정렬<br/>" +
             "- 최대 10개만 조회", tags = {"멘토링"})
     @GetMapping("main/list")
-    public BaseResponse<List<MentoringResponseDto>> getMainMentoringList() {
+    public BaseResponse<List<MainMentoringResponseDto>> getMainMentoringList() {
         return new BaseResponse<>(mentoringManagementService.getMainMentoringList());
     }
 
