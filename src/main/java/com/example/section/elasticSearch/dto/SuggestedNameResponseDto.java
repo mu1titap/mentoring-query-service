@@ -20,5 +20,5 @@ public class SuggestedNameResponseDto {
     @Getter
     public static class SuggestedName {
         private String name;
-        private String mentoringId;
+        //private String mentoringId;
     }}

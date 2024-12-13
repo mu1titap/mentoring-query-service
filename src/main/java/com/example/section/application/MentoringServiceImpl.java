@@ -1,6 +1,9 @@
 package com.example.section.application;
 
+import com.example.section.dto.out.CorrectedSearchResultResponseDto;
 import com.example.section.dto.out.MentoringCoreInfoResponseDto;
+import com.example.section.elasticSearch.application.ElasticsearchService;
+import com.example.section.elasticSearch.application.HangulUtils;
 import com.example.section.messagequeue.messageIn.MentoringAddAfterOutDto;
 import com.example.section.messagequeue.messageIn.MentoringEditRequestOutDto;
 import com.example.section.dto.out.MentoringResponseDto;
@@ -17,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +29,7 @@ public class MentoringServiceImpl implements MentoringService {
     private final MentoringMongoRepository  mentoringMongoRepository;
     private final CustomMentoringRepository customMentoringRepository;
     private final MentoringSessionMongoRepository mentoringSessionMongoRepository;
+    private final ElasticsearchService elasticsearchService;
     @Override
     public MentoringResponseDto getMentoringByMentoringUuid(String mentoringUuid) {
         return MentoringResponseDto.fromEntity(mentoringMongoRepository.findByMentoringUuidAndIsDeletedFalse(mentoringUuid));
@@ -79,7 +84,28 @@ public class MentoringServiceImpl implements MentoringService {
 
     @Override
     public Page<MentoringCoreInfoResponseDto> searchByNamePagination(String name, Pageable pageable) {
+
         return customMentoringRepository.searchByNamePagination(name, pageable);
+    }
+
+    @Override
+    public CorrectedSearchResultResponseDto elasticSearchByNamePagination(String inputWord, Pageable pageable) {
+        String spellingCorrection = "";
+        // // 검색어 입력이 있으면 교정 단어 있나 확인
+        if(!Objects.equals(inputWord, "")){
+            spellingCorrection = HangulUtils.implode(elasticsearchService.getSpellingCorrection(inputWord));
+            if(!Objects.equals(spellingCorrection, "")) {
+                return CorrectedSearchResultResponseDto.builder()
+                        .spellingCorrection(spellingCorrection)
+                        .searchResults(customMentoringRepository.searchByNamePagination(spellingCorrection, pageable))
+                        .build();
+            }
+        }
+        return CorrectedSearchResultResponseDto.builder()
+                .spellingCorrection(spellingCorrection)
+                .searchResults(customMentoringRepository.searchByNamePagination(inputWord, pageable))
+                .build();
+
     }
 
     @Override

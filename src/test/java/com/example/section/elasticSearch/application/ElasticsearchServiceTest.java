@@ -1,6 +1,7 @@
 package com.example.section.elasticSearch.application;
 
 import com.example.section.elasticSearch.dto.SuggestedNameResponseDto;
+import com.example.section.messagequeue.messageIn.MentoringEditRequestOutDto;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,23 +38,22 @@ class ElasticsearchServiceTest {
         // Given
         String indexName = "mentoring_index";
         String fieldName = "name";
-        String text = "포트";
+        String text = "맨토링asdasdasdasdasdasdasdasdas";
 
         // When
-        String correctedText = elasticsearchService.getSpellingCorrection(indexName, fieldName, text);
+        String correctedText = elasticsearchService.getSpellingCorrection(text);
 
 
         log.info("Corrected Spelling: {}", correctedText);
-        //String result = Normalizer.normalize(correctedText, Normalizer.Form.NFC);
-
-        String combine = HangulUtils.combine(correctedText);
-        log.info("result: {}", combine);
 
     }
 
     @Test
-    void asd(){
-
+    void updateEsMentoring(){
+//        // 125
+//        //
+//        MentoringEditRequestOutDto test = MentoringEditRequestOutDto.builder().id("125").name("어뎁터스 11년 첨삭 전문가, 자기소개서 첨삭 해드립니다.").build();
+//        elasticsearchService.updateEsMentoring(test);
     }
 
 

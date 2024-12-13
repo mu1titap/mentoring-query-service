@@ -1,5 +1,6 @@
 package com.example.section.entity;
 
+import com.example.section.elasticSearch.entity.EsMentoring;
 import com.example.section.messagequeue.messageIn.AfterHashtag;
 import com.example.section.messagequeue.messageIn.MentoringCategoryAfterOutDto;
 import com.example.section.messagequeue.messageIn.MentoringHashTagAfterOutDto;
@@ -54,5 +55,13 @@ public class Mentoring {
     private Integer nowSessionCount;
     private List<MentoringCategoryAfterOutDto> mentoringCategoryList;
     private List<AfterHashtag> mentoringHashTagList;
+
+
+    public EsMentoring toElasticMentoring(){
+        return EsMentoring.builder()
+                .mentoringId(this.mentoringId)
+                .name(this.name)
+                .build();
+    }
 
 }

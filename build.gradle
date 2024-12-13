@@ -37,7 +37,6 @@ dependencies {
 	//implementation 'co.elastic.clients:elasticsearch-rest-high-level-client:7.17.9'
 	implementation 'co.elastic.clients:elasticsearch-rest-high-level-client:8.7.1'
 
-
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
