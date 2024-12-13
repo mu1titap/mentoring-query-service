@@ -45,5 +45,7 @@ public interface CustomMentoringRepository {
 
     void unSetMainMentoring(String mentoringUuid);
 
+    List<MentoringResponseDto> getMainMentoringList();
+
 
 }

@@ -376,4 +376,14 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
         mongoTemplate.updateFirst(query, update, Mentoring.class);
     }
 
+    @Override
+    public List<MentoringResponseDto> getMainMentoringList() {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("isMain").is(true));
+        query.with(Sort.by(Sort.Order.desc("updatedAt")));
+        query.limit(10);
+        List<Mentoring> mainMentoringList = mongoTemplate.find(query, Mentoring.class);
+        return mainMentoringList.stream().map(MentoringResponseDto::fromEntity).toList();
+    }
+
 }
