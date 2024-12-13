@@ -1,5 +1,6 @@
 package com.example.section.infrastructure.custom;
 
+import com.example.section.dto.out.MainMentoringResponseDto;
 import com.example.section.dto.out.MentoringCoreInfoResponseDto;
 import com.example.section.dto.out.MentoringResponseDto;
 import com.example.section.messagequeue.messageIn.MentoringEditRequestOutDto;
@@ -45,7 +46,7 @@ public interface CustomMentoringRepository {
 
     void unSetMainMentoring(String mentoringUuid);
 
-    List<MentoringResponseDto> getMainMentoringList();
+    List<MainMentoringResponseDto> getMainMentoringList();
 
 
 }

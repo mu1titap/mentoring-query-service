@@ -1,5 +1,6 @@
 package com.example.section.application;
 
+import com.example.section.dto.out.MainMentoringResponseDto;
 import com.example.section.dto.out.MentoringResponseDto;
 import com.example.section.infrastructure.custom.CustomMentoringRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class MentoringManagementServiceImpl implements MentoringManagementServic
     }
 
     @Override
-    public List<MentoringResponseDto> getMainMentoringList() {
+    public List<MainMentoringResponseDto> getMainMentoringList() {
         return customMentoringRepository.getMainMentoringList();
     }
 

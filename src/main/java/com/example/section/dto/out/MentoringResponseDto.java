@@ -20,6 +20,7 @@ public class MentoringResponseDto {
 
     private String mentoringUuid;
     private String name;
+    private String description;
 
     private Long totalReviewCount;
     private Double reviewStarAvg;
@@ -46,6 +47,7 @@ public class MentoringResponseDto {
         return mentoring != null ? MentoringResponseDto.builder()
                 .mentoringUuid(mentoring.getMentoringUuid())
                 .name(mentoring.getName())
+                .description(mentoring.getDescription() != null ? mentoring.getDescription() : null)
                 .totalReviewCount(mentoring.getTotalReviewCount()!=null?mentoring.getTotalReviewCount():0)
                 .reviewStarAvg(mentoring.getReviewStarAvg()!=null?mentoring.getReviewStarAvg():0)
                 .totalSaleCount(mentoring.getTotalSaleCount()!=null?mentoring.getTotalSaleCount():0)
