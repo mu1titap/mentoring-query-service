@@ -5,6 +5,7 @@ import com.example.section.messagequeue.messageIn.MentoringCategoryAfterOutDto;
 import com.example.section.messagequeue.messageIn.MentoringHashTagAfterOutDto;
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -38,9 +39,12 @@ public class Mentoring {
     private Long totalReviewCount;
     private Double reviewStarAvg;
     private Long totalSaleCount;
+    @Indexed(name = "totalScore_index")
     private Double totalScore;
     // 집계 관련 end
 
+
+    @Indexed(name = "isMain_index")
     private Boolean isMain;
     private Boolean isDeleted;
 
