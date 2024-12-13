@@ -1,9 +1,8 @@
 package com.example.section.dto.out;
 
+import com.example.section.entity.Mentoring;
 import com.example.section.messagequeue.messageIn.AfterHashtag;
 import com.example.section.messagequeue.messageIn.MentoringCategoryAfterOutDto;
-import com.example.section.entity.Mentoring;
-import com.example.section.messagequeue.messageIn.MentoringHashTagAfterOutDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,8 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MentoringResponseDto {
-
+public class MainMentoringResponseDto {
     private String mentoringUuid;
     private String name;
     private String description;
@@ -26,8 +24,6 @@ public class MentoringResponseDto {
     private Double reviewStarAvg;
     private Long totalSaleCount;
 
-
-    private String detail;
 
     private String mentorUuid;
 
@@ -43,15 +39,15 @@ public class MentoringResponseDto {
     private List<MentoringCategoryResponseDto> categoryList;
     private List<MentoringHashTagResponseDto> hashTagList;
 
-    public static MentoringResponseDto fromEntity(Mentoring mentoring) {
-        return mentoring != null ? MentoringResponseDto.builder()
+
+    public static MainMentoringResponseDto from(Mentoring mentoring) {
+        return mentoring != null ? MainMentoringResponseDto.builder()
                 .mentoringUuid(mentoring.getMentoringUuid())
                 .name(mentoring.getName())
-                .description(mentoring.getDescription() != null ? mentoring.getDescription() : null)
+                .description(mentoring.getDescription()!= null ? mentoring.getDescription() : null)
                 .totalReviewCount(mentoring.getTotalReviewCount()!=null?mentoring.getTotalReviewCount():0)
                 .reviewStarAvg(mentoring.getReviewStarAvg()!=null?mentoring.getReviewStarAvg():0)
                 .totalSaleCount(mentoring.getTotalSaleCount()!=null?mentoring.getTotalSaleCount():0)
-                .detail(mentoring.getDetail())
                 .mentorUuid(mentoring.getMentorUuid())
                 .thumbnailUrl(mentoring.getThumbnailUrl())
                 .isReusable(mentoring.getIsReusable())
@@ -62,7 +58,6 @@ public class MentoringResponseDto {
                 .hashTagList(getHashTag(mentoring.getMentoringHashTagList()))
                 .build() : null;
     }
-
     public static List<MentoringCategoryResponseDto> getCategory(
             List<MentoringCategoryAfterOutDto> mentoringCategories)
     {
@@ -87,4 +82,5 @@ public class MentoringResponseDto {
                         .build())
                 .toList() : null;
     }
+
 }

@@ -1,12 +1,11 @@
 package com.example.section.entity;
 
-import com.example.section.elasticSearch.entity.EsMentoring;
 import com.example.section.messagequeue.messageIn.AfterHashtag;
 import com.example.section.messagequeue.messageIn.MentoringCategoryAfterOutDto;
 import com.example.section.messagequeue.messageIn.MentoringHashTagAfterOutDto;
 import lombok.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.core.suggest.Completion;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -40,9 +39,13 @@ public class Mentoring {
     private Long totalReviewCount;
     private Double reviewStarAvg;
     private Long totalSaleCount;
+    @Indexed(name = "totalScore_index")
     private Double totalScore;
     // 집계 관련 end
 
+
+    @Indexed(name = "isMain_index")
+    private Boolean isMain;
     private Boolean isDeleted;
 
     private LocalDateTime createdAt;
@@ -51,13 +54,5 @@ public class Mentoring {
     private Integer nowSessionCount;
     private List<MentoringCategoryAfterOutDto> mentoringCategoryList;
     private List<AfterHashtag> mentoringHashTagList;
-
-    public static EsMentoring toEsEntity(Mentoring mentoring) {
-
-        return EsMentoring.builder()
-                .mentoringId(mentoring.getMentoringId())
-                .name(mentoring.getName())
-                .build();
-    }
 
 }
