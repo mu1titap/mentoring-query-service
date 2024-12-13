@@ -79,6 +79,9 @@ public class CustomSessionRepositoryImpl implements CustomSessionRepository {
     public List<MentoringSessionResponseDto> findAllByMentoringUuidAndDeadlineDateV2(String mentoringUuid, String userUuid) {
 
         Aggregation aggregation = Aggregation.newAggregation(
+                // sessionUsers 배열을 펼침
+                Aggregation.unwind("sessionUsers", true),
+
                 Aggregation.match(Criteria.where("mentoringUuid").is(mentoringUuid)
                         .and("isDeleted").is(false)
                         .and("deadlineDate").gte(LocalDate.now())),
@@ -90,8 +93,6 @@ public class CustomSessionRepositoryImpl implements CustomSessionRepository {
                                         .otherwise(false)
                         ).build(),
 
-                // sessionUsers 배열을 펼침
-                Aggregation.unwind("sessionUsers", true),
                 // sessionUsers를 배열로 다시 그룹화
                 Aggregation.group("sessionUuid", "mentoringUuid", "startDate", "endDate", "startTime", "endTime",
                                 "deadlineDate", "minHeadCount", "maxHeadCount", "nowHeadCount", "isParticipating", "price", "isClosed")
