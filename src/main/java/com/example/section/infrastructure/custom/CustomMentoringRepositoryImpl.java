@@ -358,4 +358,22 @@ public class CustomMentoringRepositoryImpl implements CustomMentoringRepository 
 
     }
 
+    @Override
+    public void setMainMentoring(String mentoringUuid) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("mentoringUuid").is(mentoringUuid));
+        Update update = new Update();
+        update.set("isMain", true);
+        mongoTemplate.updateFirst(query, update, Mentoring.class);
+    }
+
+    @Override
+    public void unSetMainMentoring(String mentoringUuid) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("mentoringUuid").is(mentoringUuid));
+        Update update = new Update();
+        update.set("isMain", false);
+        mongoTemplate.updateFirst(query, update, Mentoring.class);
+    }
+
 }

@@ -41,6 +41,7 @@ public class Mentoring {
     private Double totalScore;
     // 집계 관련 end
 
+    private Boolean isMain;
     private Boolean isDeleted;
 
     private LocalDateTime createdAt;

@@ -11,6 +11,9 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface CustomMentoringRepository {
+    /**
+     * create, update
+     */
     void updateMentoring(MentoringEditRequestOutDto mentoringEditRequestDto);
 
     void increaseNowSessionCount(String mentoringUuid, int count);
@@ -18,7 +21,9 @@ public interface CustomMentoringRepository {
     void decreaseNowSessionCountById(String mentoringId, int count);
 
     void updateMentoringOverview(MentoringOverviewDto dto);
-
+    /**
+     * select
+     */
     List<Mentoring> getReusableMentoringListByMentorUuid(String userUuid);
 
     // mentorUuid로 삭제되지 않은 멘토링 조회
@@ -33,7 +38,12 @@ public interface CustomMentoringRepository {
 
     List<MentoringCoreInfoResponseDto> findPopularMentoringList(List<String> topCategoryCodeList);
 
+    /**
+     * 관리
+     */
+    void setMainMentoring(String mentoringUuid);
 
+    void unSetMainMentoring(String mentoringUuid);
 
 
 }
