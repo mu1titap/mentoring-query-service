@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Transactional(readOnly = true)
 public interface MentoringService {
 
     MentoringResponseDto getMentoringByMentoringUuid(String mentoringUuid);
@@ -34,20 +33,14 @@ public interface MentoringService {
 
     //List<>
 
-    @Transactional
     void createMentoringWithSession(MentoringAddAfterOutDto mentoringAddAfterDto);
-    @Transactional
     void updateMentoring(MentoringEditRequestOutDto mentoringEditRequestOutDto);
 
-    @Transactional
     void increaseNowSessionCount(String mentoringUuid, int count);
-    @Transactional
     void decreaseNowSessionCountByUuid(String mentoringUuid, int count);
 
-    @Transactional
     void decreaseNowSessionCountById(String mentoringId, int count);
 
-    @Transactional
     void updateMentoringOverview(MentoringOverviewDto dto);
 
 }
