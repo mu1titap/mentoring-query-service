@@ -52,13 +52,11 @@ public class Mentoring {
     private List<MentoringCategoryAfterOutDto> mentoringCategoryList;
     private List<AfterHashtag> mentoringHashTagList;
 
-    public static EsMentoring toEsEntity(Mentoring mentoring, List<String> analysisResult) {
-        Completion completion = new Completion(analysisResult.toArray(new String[0]));
+    public static EsMentoring toEsEntity(Mentoring mentoring) {
 
         return EsMentoring.builder()
                 .mentoringId(mentoring.getMentoringId())
                 .name(mentoring.getName())
-                .suggest(completion) // Use the converted Completion object
                 .build();
     }
 

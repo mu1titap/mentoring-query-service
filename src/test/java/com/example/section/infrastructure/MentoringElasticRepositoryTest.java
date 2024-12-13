@@ -26,42 +26,15 @@ class MentoringElasticRepositoryTest {
     @Autowired
     private MentoringMongoRepository mentoringMongoRepository;
 
-    @Test
-    void createEsMentoring() {
-        String name = "잠실역";
-        List<String> strings = elasticsearchService.analyzeText(name);
-        Completion completion = new Completion(strings.toArray(new String[0]));
-        EsMentoring esMentoring = EsMentoring.builder()
-                .name(name)
-                .suggest(completion) // 수동으로 Suggest 값 설정
-                .build();
-        mentoringElasticRepository.save(esMentoring);
-    }
 
-    @Test
-    void analyzeEsMentoring() {
-        String name = "자소서";
-        List<String> strings = elasticsearchService.analyzeText(name);
-        log.info(Arrays.toString(strings.toArray()));
-    }
-
-    @Test
-    void getSuggestions(){
-        List<String> result = elasticsearchService.getSuggestions("ㅍㅌ");
-        log.info("result : "+result.size());
-        log.info(Arrays.toString(result.toArray()));
-
-    }
 
     @Test
     void mentoringReadDataSynchronization(){
         List<Mentoring> all = mentoringMongoRepository.findAll();
         log.info("all size : "+all.size());
+        //List<String> analysisResult = elasticsearchService.analyzeText(mentoring.getName());
         all.stream()
-                .map(mentoring -> {
-                    List<String> analysisResult = elasticsearchService.analyzeText(mentoring.getName());
-                    return mentoring.toEsEntity(mentoring, analysisResult);
-                })
+                .map(Mentoring::toEsEntity)
                 .forEach(mentoringElasticRepository::save);
     }
 }
