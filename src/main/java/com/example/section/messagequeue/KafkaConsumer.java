@@ -2,6 +2,7 @@ package com.example.section.messagequeue;
 
 import com.example.section.application.MentoringService;
 import com.example.section.application.SessionService;
+import com.example.section.elasticSearch.application.ElasticsearchService;
 import com.example.section.messagequeue.messageIn.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -15,6 +16,7 @@ public class KafkaConsumer {
 
     private final MentoringService mentoringService;
     private final SessionService sessionService;
+    private final ElasticsearchService elasticsearchService;
 
     /**
      * 멘토링 생성 이벤트 컨슘
@@ -25,6 +27,8 @@ public class KafkaConsumer {
         log.info("멘토링 생성 이벤트 컨슘 + dto = "+dto);
         // 멘토링 저장
         mentoringService.createMentoringWithSession(dto);
+        // elastic search 저장
+        elasticsearchService.createEsMentoring(dto);
     }
     /**
      * 세션 추가 이벤트 컨슘
@@ -46,7 +50,9 @@ public class KafkaConsumer {
     @KafkaListener(topics = "update-mentoring", groupId = "kafka-mentoring-query-service",
             containerFactory = "mentoringEditRequestDtoListener")
     public void createMentoring(MentoringEditRequestOutDto dto) {
+
         mentoringService.updateMentoring(dto);
+        elasticsearchService.updateEsMentoring(dto);
     }
 
     /**

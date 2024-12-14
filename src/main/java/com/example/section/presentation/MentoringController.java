@@ -3,11 +3,9 @@ package com.example.section.presentation;
 import com.example.section.application.MentoringService;
 import com.example.section.application.SessionService;
 import com.example.section.common.entity.BaseResponse;
-import com.example.section.dto.out.MentoringCoreInfoResponseDto;
-import com.example.section.dto.out.MentoringResponseDto;
-import com.example.section.dto.out.MentoringReusableResponseDto;
-import com.example.section.dto.out.MentoringSessionResponseDto;
+import com.example.section.dto.out.*;
 import com.example.section.entity.Mentoring;
+import com.example.section.vo.InputWordVo;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -92,6 +90,8 @@ public class MentoringController {
     {
         return new BaseResponse<>(mentoringQueryService.searchByNamePagination(name, pageable));
     }
+
+
 
     // popularMentoring
     @Operation(summary = "인기 멘토링 조회" ,

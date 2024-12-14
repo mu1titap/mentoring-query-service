@@ -1,5 +1,6 @@
 package com.example.section.application;
 
+import com.example.section.dto.out.CorrectedSearchResultResponseDto;
 import com.example.section.dto.out.MentoringCoreInfoResponseDto;
 import com.example.section.messagequeue.messageIn.MentoringAddAfterOutDto;
 import com.example.section.messagequeue.messageIn.MentoringEditRequestOutDto;
@@ -27,6 +28,7 @@ public interface MentoringService {
     Page<MentoringCoreInfoResponseDto> searchMentoringByMentorUuidPagination(String userUuid, Boolean isMentor, Pageable pageable);
 
     Page<MentoringCoreInfoResponseDto> searchByNamePagination(String name, Pageable pageable);
+    CorrectedSearchResultResponseDto elasticSearchByNamePagination(String inputWord, Pageable pageable);
 
     // 인기 벤토링
     List<MentoringCoreInfoResponseDto> findPopularMentoringList(List<String> topCategoryCodeList);
