@@ -43,6 +43,8 @@
 //                .build();
 //    }
 //    private SSLContext createSslContext() {
+//        log.info("Loading CA certificate from: " + caCertificate.getDescription());
+
 //        try (InputStream caInput = caCertificate.getInputStream()) {
 //            log.info("Loading CA certificate from: " + caCertificate.getURI());
 //
@@ -113,6 +115,18 @@ public class ElasticsearchConfig extends ElasticsearchConfiguration {
     @Override
     public ClientConfiguration clientConfiguration() {
         log.info("host : " + host);
+
+        // 클래스패스에 해당 파일이 존재하는지 확인하는 로직 추가
+        String resourceName = caCertificate.getFilename(); // 예: caDeply.crt
+        if (resourceName != null) {
+            log.info("Checking if " + resourceName + " is on the classpath...");
+            if (this.getClass().getClassLoader().getResource(resourceName) != null) {
+                log.info(resourceName + " found in classpath at " + this.getClass().getClassLoader().getResource(resourceName));
+            } else {
+                log.warn(resourceName + " NOT found in classpath!");
+            }
+        }
+
         SSLContext sslContext = createSslContext();
 
         // 호스트 검증을 비활성화하는 HostnameVerifier (항상 true 반환)
@@ -126,6 +140,7 @@ public class ElasticsearchConfig extends ElasticsearchConfiguration {
     }
 
     private SSLContext createSslContext() {
+        log.info("Loading CA certificate from: " + caCertificate.getDescription());
         try (InputStream caInput = caCertificate.getInputStream()) {
 
             // CA 인증서 로드
@@ -153,5 +168,4 @@ public class ElasticsearchConfig extends ElasticsearchConfiguration {
             throw new RuntimeException("Could not create SSL context", e);
         }
     }
-
 }
