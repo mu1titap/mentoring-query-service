@@ -35,7 +35,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
 	implementation 'co.elastic.clients:elasticsearch-java:8.9.0'
 	//implementation 'co.elastic.clients:elasticsearch-rest-high-level-client:7.17.9'
-	implementation 'co.elastic.clients:elasticsearch-rest-high-level-client:8.7.1'
+	//implementation 'co.elastic.clients:elasticsearch-rest-high-level-client:8.7.1'
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
