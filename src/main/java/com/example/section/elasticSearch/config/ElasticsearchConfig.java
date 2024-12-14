@@ -43,6 +43,8 @@
 //                .build();
 //    }
 //    private SSLContext createSslContext() {
+//        log.info("Loading CA certificate from: " + caCertificate.getDescription());
+
 //        try (InputStream caInput = caCertificate.getInputStream()) {
 //            log.info("Loading CA certificate from: " + caCertificate.getURI());
 //
@@ -126,6 +128,8 @@ public class ElasticsearchConfig extends ElasticsearchConfiguration {
     }
 
     private SSLContext createSslContext() {
+        log.info("Loading CA certificate from: " + caCertificate.getDescription());
+
         try (InputStream caInput = caCertificate.getInputStream()) {
 
             // CA 인증서 로드
