@@ -29,7 +29,6 @@ src/main/resources/application.yml
 **/SwaggerConfig.class
 **/SwaggerConfig.java
 # elastic search
-/src/main/resources/ca.crt
 src/main/resources/**
 
 ### NetBeans ###
