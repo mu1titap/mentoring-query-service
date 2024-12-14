@@ -28,7 +28,7 @@ public interface MentoringService {
     Page<MentoringCoreInfoResponseDto> searchMentoringByMentorUuidPagination(String userUuid, Boolean isMentor, Pageable pageable);
 
     Page<MentoringCoreInfoResponseDto> searchByNamePagination(String name, Pageable pageable);
-    CorrectedSearchResultResponseDto elasticSearchByNamePagination(String inputWord, Pageable pageable);
+    CorrectedSearchResultResponseDto elasticSearchByNamePagination(String inputWord, Boolean isDirect, Pageable pageable);
 
     // 인기 벤토링
     List<MentoringCoreInfoResponseDto> findPopularMentoringList(List<String> topCategoryCodeList);
