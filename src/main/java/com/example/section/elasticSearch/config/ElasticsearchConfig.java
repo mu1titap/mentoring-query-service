@@ -97,7 +97,7 @@ import java.security.cert.X509Certificate;
 @EnableElasticsearchRepositories(basePackages = "com.example.section.repository")
 @Log4j2
 public class ElasticsearchConfig extends ElasticsearchConfiguration {
-
+    //
     @Value("${spring.elasticsearch.username}")
     private String username;
 
