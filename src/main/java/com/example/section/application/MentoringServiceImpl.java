@@ -89,10 +89,10 @@ public class MentoringServiceImpl implements MentoringService {
     }
 
     @Override
-    public CorrectedSearchResultResponseDto elasticSearchByNamePagination(String inputWord, Pageable pageable) {
+    public CorrectedSearchResultResponseDto elasticSearchByNamePagination(String inputWord, Boolean isDirect, Pageable pageable) {
         String spellingCorrection = "";
-        // // 검색어 입력이 있으면 교정 단어 있나 확인
-        if(!Objects.equals(inputWord, "")){
+        // 직접 검색(자동완성 검색x) 하고 검색어 입력이 공백이 아니면(검색어가 존재하면) 교정 단어 있나 확인 후 있으면 교정 단어로 검색
+        if(isDirect && !Objects.equals(inputWord, "")){
             spellingCorrection = HangulUtils.implode(elasticsearchService.getSpellingCorrection(inputWord));
             if(!Objects.equals(spellingCorrection, "")) {
                 return CorrectedSearchResultResponseDto.builder()

@@ -45,7 +45,8 @@ public class ElasticController {
     )
     {
         String inputWord = requestVo.getWord() != null ? requestVo.getWord() : "";
-        return new BaseResponse<>(MentoringService.elasticSearchByNamePagination(inputWord, pageable));
+        Boolean isDirect = requestVo.getIsDirect();
+        return new BaseResponse<>(MentoringService.elasticSearchByNamePagination(inputWord, isDirect, pageable));
     }
 
 
