@@ -1,6 +1,7 @@
 package com.example.section.dto.out;
 
 import com.example.section.entity.Mentoring;
+import com.example.section.entity.vo.MainImage;
 import com.example.section.messagequeue.messageIn.AfterHashtag;
 import com.example.section.messagequeue.messageIn.MentoringCategoryAfterOutDto;
 import lombok.AllArgsConstructor;
@@ -27,7 +28,7 @@ public class MainMentoringResponseDto {
 
     private String mentorUuid;
 
-    private String thumbnailUrl;
+    //private String thumbnailUrl;
 
     private Boolean isReusable;
 
@@ -38,6 +39,7 @@ public class MainMentoringResponseDto {
 
     private List<MentoringCategoryResponseDto> categoryList;
     private List<MentoringHashTagResponseDto> hashTagList;
+    private List <MainImage> mainImageList;
 
 
     public static MainMentoringResponseDto from(Mentoring mentoring) {
@@ -49,7 +51,8 @@ public class MainMentoringResponseDto {
                 .reviewStarAvg(mentoring.getReviewStarAvg()!=null?mentoring.getReviewStarAvg():0)
                 .totalSaleCount(mentoring.getTotalSaleCount()!=null?mentoring.getTotalSaleCount():0)
                 .mentorUuid(mentoring.getMentorUuid())
-                .thumbnailUrl(mentoring.getThumbnailUrl())
+                //.thumbnailUrl(mentoring.getThumbnailUrl())
+                .mainImageList(mentoring.getMainImageList() != null ? mentoring.getMainImageList() : null)
                 .isReusable(mentoring.getIsReusable())
                 .isDeleted(mentoring.getIsDeleted())
                 .createdAt(mentoring.getCreatedAt())
